@@ -74,6 +74,29 @@ Modification of the Anycubic Photon Mono M7 SLA printer to run NanoDLP. The orig
 | VFP | 77 |
 | V_total | 5217 |
 
+## Original Mainboard Connectors
+
+![Original board connectors](doc/orig-board-labeled.svg)
+
+Coordinates are XY in mm, origin at top-left corner of the board.
+
+| Connector | Type | Pins | Position (mm) | Notes |
+|-----------|------|------|---------------|-------|
+| Projector LCD panel | FPC | 50 | 0, 25 | MIPI DSI to DBM101M14K01 |
+| UI LCD panel | FPC | 50 | 0, 60 | Touchscreen UI display |
+| Build platform sensor | JST 2mm | 4 | 20, 46 | I2C, unknown sensor (possibly strain/force for release detection) |
+| NTC thermistor | JST 2.54mm | 2 | 70, 80 | NTC 100k on UV lamp heatsink |
+| Z-axis stepper | JST 2.54mm | 4 | 90, 0 | Z-axis stepper motor |
+| Lamp PWM | JST 2.54mm | 2 | 105, 0 | UV lamp PWM control |
+| Lamp fan 0 | JST 2.54mm | 2 | 83, 35 | UV lamp cooling fan |
+| Lamp fan 1 | JST 2.54mm | 2 | 93, 35 | UV lamp cooling fan |
+| Lamp power supply | Latched, 3.75mm | 2 | 115, 25 | Power to UV lamp (connector type TBD) |
+| Main power input | Terminal block | 2 | 115, 12 | Input from main PSU |
+| External USB | JST 2mm | 5 | 116, 67 | External USB port |
+| Front panel button | JST 2.54mm | 4 | 110, 50 | Power button + LED (TBC) |
+| Low Z stop | JST 2.54mm | 3 | 85, 56 | Z-axis min endstop |
+| PRO model interface | JST 2mm | 8 | 50, 67 | Interface for PRO variant (function TBD) |
+
 ## Verified
 
 - BHTM08 works correctly with DBM101M14K01

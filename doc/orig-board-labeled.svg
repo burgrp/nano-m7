@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Original mainboard connector map
+     Scale: ~5.85 px/mm, origin offset (15, 10) px
+     Coordinates from user-measured XY positions in mm, origin top-left of board -->
+
+<svg
+   width="790"
+   height="519"
+   version="1.1"
+   id="svg116"
+   sodipodi:docname="orig-board-labeled.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs120" />
+  <sodipodi:namedview
+     id="namedview118"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     showgrid="false"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:zoom="1.0955696"
+     inkscape:cx="431.2825"
+     inkscape:cy="317.64298"
+     inkscape:window-width="2560"
+     inkscape:window-height="1379"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg116" />
+  <image
+     xlink:href="orig-board.jpg"
+     href="orig-board.jpg"
+     x="0"
+     y="0"
+     width="790"
+     height="519"
+     id="image2"
+     sodipodi:insensitive="true" />
+  <!-- ── Lines: connector → label ────────────────────────────── -->
+  <!-- ── Circles at connector positions ──────────────────────── -->
+  <!-- ── Labels (rounded rect + text) ────────────────────────── -->
+  <!-- 1. FPC projector LCD  cx=175 cy=148 w=122 -->
+  <g
+     id="g2471">
+    <rect
+       x="35.87587"
+       y="135.65535"
+       width="122"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect60"
+       ry="4"
+       style="fill:#ffff00" />
+    <text
+       x="96.677872"
+       y="146.44086"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text62">FPC projector LCD</text>
+  </g>
+  <!-- 2. FPC UI LCD  cx=175 cy=370 w=88 -->
+  <g
+     id="g2479">
+    <rect
+       x="47.231438"
+       y="341.7612"
+       width="88"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect64"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="91.231438"
+       y="353.7612"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text66">FPC UI LCD</text>
+  </g>
+  <!-- 3. Build platform sensor  cx=265 cy=308 w=142 -->
+  <g
+     id="g2475">
+    <rect
+       x="75.962364"
+       y="238.51257"
+       width="142"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect68"
+       ry="4"
+       style="fill:#ffff00" />
+    <text
+       x="146.51135"
+       y="249.45209"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text70">Build platform sensor</text>
+  </g>
+  <!-- 4. NTC thermistor  cx=305 cy=462 w=102 -->
+  <g
+     id="g3385"
+     transform="translate(131.3375,-15.795485)">
+    <rect
+       x="254"
+       y="451"
+       width="102"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect72"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="305"
+       y="463"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text74">NTC thermistor</text>
+  </g>
+  <!-- 5. Z-axis stepper  cx=430 cy=65 w=97 -->
+  <g
+     id="g2483"
+     transform="translate(11,-15)">
+    <rect
+       x="381"
+       y="54"
+       width="97"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect76"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="430"
+       y="66"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text78">Z-axis stepper</text>
+  </g>
+  <!-- 6. Lamp PWM  cx=645 cy=52 w=82 -->
+  <g
+     id="g2611"
+     transform="translate(33,-31)">
+    <rect
+       x="604"
+       y="41"
+       width="82"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect80"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="645"
+       y="53"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text82">Lamp PWM</text>
+  </g>
+  <!-- 7. Lamp fan 0  cx=385 cy=198 w=80 -->
+  <g
+     id="g3903"
+     transform="translate(98.266903,44.087911)">
+    <rect
+       x="345"
+       y="187"
+       width="80"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect84"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="385"
+       y="199"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text86">Lamp fan 0</text>
+  </g>
+  <!-- 8. Lamp fan 1  cx=460 cy=248 w=80 -->
+  <g
+     id="g3907"
+     transform="translate(116.04586,-4.3778451)">
+    <rect
+       x="420"
+       y="237"
+       width="80"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect88"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="460"
+       y="249"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text90">Lamp fan 1</text>
+  </g>
+  <!-- 9. Lamp power supply  cx=540 cy=147 w=118 -->
+  <g
+     id="g2953"
+     transform="translate(111.20712,0.32989202)">
+    <rect
+       x="481"
+       y="136"
+       width="118"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect92"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="540"
+       y="148"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text94">Lamp power supply</text>
+  </g>
+  <!-- 10. Main power input  cx=545 cy=72 w=112 -->
+  <g
+     id="g2509"
+     transform="translate(143,7.9999981)">
+    <g
+       id="g2504">
+      <rect
+         x="490"
+         y="61.19643"
+         width="110"
+         height="21.607143"
+         rx="4"
+         fill="#ffffffee"
+         stroke="#55555588"
+         stroke-width="0.8"
+         id="rect96"
+         style="fill:#ffff00"
+         ry="4" />
+    </g>
+    <text
+       x="545"
+       y="73"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text98">Main power input</text>
+  </g>
+  <!-- 11. External USB  cx=545 cy=416 w=92 -->
+  <g
+     id="g3389"
+     transform="rotate(-90,648.22089,314.33834)">
+    <rect
+       x="499"
+       y="405"
+       width="92"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect100"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="545"
+       y="417"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text102">External USB</text>
+  </g>
+  <!-- 12. Front panel button  cx=488 cy=287 w=128 -->
+  <g
+     id="g3713"
+     transform="rotate(-90,570.3137,214.28161)">
+    <rect
+       x="424"
+       y="276"
+       width="128"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect104"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="488"
+       y="288"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text106">Front panel button</text>
+  </g>
+  <!-- 13. Low Z stop  cx=383 cy=352 w=82 -->
+  <g
+     id="g3881"
+     transform="translate(144.82449,-57.440293)">
+    <rect
+       x="342"
+       y="341"
+       width="82"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect108"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="383"
+       y="353"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text110">Low Z stop</text>
+  </g>
+  <!-- 14. PRO model interface  cx=548 cy=327 w=128 -->
+  <g
+     id="g3717"
+     transform="rotate(-90,635.22089,212.33834)">
+    <rect
+       x="484"
+       y="316"
+       width="128"
+       height="22"
+       rx="4"
+       fill="#ffffffee"
+       stroke="#55555588"
+       stroke-width="0.8"
+       id="rect112"
+       style="fill:#ffff00"
+       ry="4" />
+    <text
+       x="548"
+       y="328"
+       text-anchor="middle"
+       dominant-baseline="middle"
+       fill="#111111"
+       font-family="sans-serif"
+       font-size="11px"
+       id="text114">PRO model interface</text>
+  </g>
+</svg>
