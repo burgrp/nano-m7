@@ -35,7 +35,7 @@ Modification of the Anycubic Photon Mono M7 SLA printer to run NanoDLP. The orig
 - Connected to NanoDLP Controller Board via wires/cables
 
 ### NanoDLP Controller Board
-- Standalone board by nano3dtech.com, connected to Raspberry Pi via wires
+- [Standalone board by nano3dtech.com](https://www.nano3dtech.com/nanodlp-controller-board), connected to Raspberry Pi via wires
 - Powers the Raspberry Pi (Pi should not have separate power supply)
 - TMC2209 integrated stepper driver (Z-axis)
 - HDMI output → BHTM08 → display
@@ -95,7 +95,8 @@ Coordinates are XY in mm, origin at top-left corner of the board.
 | External USB | JST 2mm | 5 | 116, 67 | External USB port |
 | Front panel button | JST 2.54mm | 4 | 110, 50 | Power button + LED (TBC) |
 | Low Z stop | JST 2.54mm | 3 | 85, 56 | Z-axis min endstop |
-| PRO model interface | JST 2mm | 8 | 50, 67 | Interface for PRO variant (function TBD) |
+| PRO model interface | JST 2mm | 8 | 116, 50 | Interface for PRO variant (function TBD) |
+| WiFi | IPX | 1 | 80, 60 | WiFi module connector |
 
 ## Verified
 

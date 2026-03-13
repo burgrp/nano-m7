@@ -1,0 +1,3 @@
+[submodule "sub/hw-kicad"]
+	path = sub/hw-kicad
+	url = https://github.com/burgrp/hw-kicad
