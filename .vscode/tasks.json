@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Make & Flash",
+			"type": "shell",
+			"command": "make flash",
+			"options": {
+				"cwd": "${workspaceFolder}/fw"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [
+				"$go"
+			]
+		}
+	]
+}

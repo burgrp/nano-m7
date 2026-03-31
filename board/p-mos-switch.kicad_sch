@@ -1213,7 +1213,7 @@
 				)
 			)
 		)
-		(property "Value" "1k"
+		(property "Value" "1k5"
 			(at 121.92 68.58 90)
 			(effects
 				(font

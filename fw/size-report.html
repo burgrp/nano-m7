@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Size Report for main.go</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+
+.table-vertical-border {
+  border-left: calc(var(--bs-border-width) * 2) solid currentcolor;
+}
+
+ 
+.row-package:hover > * {
+  --bs-table-color-state: var(--bs-table-hover-color);
+  --bs-table-bg-state: var(--bs-table-hover-bg);
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container-xxl">
+      <h1>Size Report for main.go</h1>
+
+      <p>How much space is used by Go packages, C libraries, and other bits to set up the program environment.</p>
+
+      <ul>
+        <li><strong>Code</strong> is the actual program code (machine code instructions).</li>
+        <li><strong>Read-only data</strong> are read-only global variables. On most microcontrollers, these are stored in flash and do not take up any RAM.</li>
+        <li><strong>Data</strong> are writable global variables with a non-zero initializer. On microcontrollers, they are copied from flash to RAM on reset.</li>
+        <li><strong>BSS</strong> are writable global variables that are zero initialized. They do not take up any space in the binary, but do take up RAM. On microcontrollers, this area is zeroed on reset.</li>
+      </ul>
+
+      <p>The binary size consists of code, read-only data, and data. On microcontrollers, this is exactly the size of the firmware image. On other systems, there is some extra overhead: binary metadata (headers of the ELF/MachO/COFF file), debug information, exception tables, symbol names, etc. Using <code>-no-debug</code> strips most of those.</p>
+
+      <h2>Program breakdown</h2>
+
+      <p>You can click on the rows below to see which files contribute to the binary size.</p>
+
+      <div class="table-responsive">
+        <table class="table w-auto">
+          <thead>
+            <tr>
+              <th>Package</th>
+              <th class="table-vertical-border">Code</th>
+              <th>Read-only data</th>
+              <th>Data</th>
+              <th title="zero-initialized data">BSS</th>
+              <th class="table-vertical-border" style="min-width: 16em">Binary size</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            
+            <tr class="row-package" data-collapse=".collapse-row-0">
+              <td>(padding)</td>
+              <td class="table-vertical-border">0</td>
+              <td>8</td>
+              <td>0</td>
+              <td>4</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.24509803921568626%, var(--bs-table-bg) 0.24509803921568626%)">
+                8
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-0">
+              <td class="ps-4">
+                
+                  (unknown file)
+                
+              </td>
+              <td class="table-vertical-border">0</td>
+              <td>8</td>
+              <td>0</td>
+              <td>4</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.24509803921568626%, var(--bs-table-bg) 0.24509803921568626%)">
+                8
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-1">
+              <td>(unknown)</td>
+              <td class="table-vertical-border">0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>14</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0%, var(--bs-table-bg) 0%)">
+                0
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-1">
+              <td class="ps-4">
+                
+                  (unknown file)
+                
+              </td>
+              <td class="table-vertical-border">0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>14</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0%, var(--bs-table-bg) 0%)">
+                0
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-2">
+              <td>C compiler-rt</td>
+              <td class="table-vertical-border">934</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 28.61519607843137%, var(--bs-table-bg) 28.61519607843137%)">
+                934
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-2">
+              <td class="ps-4">
+                
+                  lib/builtins/arm/aeabi_memset.S
+                
+              </td>
+              <td class="table-vertical-border">28</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.857843137254902%, var(--bs-table-bg) 0.857843137254902%)">
+                28
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-2">
+              <td class="ps-4">
+                
+                  lib/builtins/arm/aeabi_uldivmod.S
+                
+              </td>
+              <td class="table-vertical-border">20</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.6127450980392157%, var(--bs-table-bg) 0.6127450980392157%)">
+                20
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-2">
+              <td class="ps-4">
+                
+                  lib/builtins/clzsi2.c
+                
+              </td>
+              <td class="table-vertical-border">92</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 2.8186274509803924%, var(--bs-table-bg) 2.8186274509803924%)">
+                92
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-2">
+              <td class="ps-4">
+                
+                  lib/builtins/int_div_impl.inc
+                
+              </td>
+              <td class="table-vertical-border">92</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 2.8186274509803924%, var(--bs-table-bg) 2.8186274509803924%)">
+                92
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-2">
+              <td class="ps-4">
+                
+                  lib/builtins/muldi3.c
+                
+              </td>
+              <td class="table-vertical-border">52</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.5931372549019607%, var(--bs-table-bg) 1.5931372549019607%)">
+                52
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-2">
+              <td class="ps-4">
+                
+                  lib/builtins/udivmoddi4.c
+                
+              </td>
+              <td class="table-vertical-border">636</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 19.485294117647058%, var(--bs-table-bg) 19.485294117647058%)">
+                636
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-2">
+              <td class="ps-4">
+                
+                  lib/builtins/udivsi3.c
+                
+              </td>
+              <td class="table-vertical-border">14</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.428921568627451%, var(--bs-table-bg) 0.428921568627451%)">
+                14
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-3">
+              <td>C interrupt vector</td>
+              <td class="table-vertical-border">0</td>
+              <td>188</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 5.759803921568627%, var(--bs-table-bg) 5.759803921568627%)">
+                188
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-3">
+              <td class="ps-4">
+                
+                  (unknown file)
+                
+              </td>
+              <td class="table-vertical-border">0</td>
+              <td>188</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 5.759803921568627%, var(--bs-table-bg) 5.759803921568627%)">
+                188
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-4">
+              <td>C picolibc</td>
+              <td class="table-vertical-border">14</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.428921568627451%, var(--bs-table-bg) 0.428921568627451%)">
+                14
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-4">
+              <td class="ps-4">
+                
+                  newlib/libc/string/memset.c
+                
+              </td>
+              <td class="table-vertical-border">14</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.428921568627451%, var(--bs-table-bg) 0.428921568627451%)">
+                14
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-5">
+              <td>C stack</td>
+              <td class="table-vertical-border">0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>512</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0%, var(--bs-table-bg) 0%)">
+                0
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-5">
+              <td class="ps-4">
+                
+                  (unknown file)
+                
+              </td>
+              <td class="table-vertical-border">0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>512</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0%, var(--bs-table-bg) 0%)">
+                0
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-6">
+              <td>device/arm</td>
+              <td class="table-vertical-border">32</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.9803921568627451%, var(--bs-table-bg) 0.9803921568627451%)">
+                32
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-6">
+              <td class="ps-4">
+                
+                  arm.go
+                
+              </td>
+              <td class="table-vertical-border">8</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.24509803921568626%, var(--bs-table-bg) 0.24509803921568626%)">
+                8
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-6">
+              <td class="ps-4">
+                
+                  interrupts.c
+                
+              </td>
+              <td class="table-vertical-border">24</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.7352941176470588%, var(--bs-table-bg) 0.7352941176470588%)">
+                24
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-7">
+              <td>device/py32</td>
+              <td class="table-vertical-border">26</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.7965686274509803%, var(--bs-table-bg) 0.7965686274509803%)">
+                26
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-7">
+              <td class="ps-4">
+                
+                  py32f030xx.go
+                
+              </td>
+              <td class="table-vertical-border">22</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.6740196078431373%, var(--bs-table-bg) 0.6740196078431373%)">
+                22
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-7">
+              <td class="ps-4">
+                
+                  py32f030xx.s
+                
+              </td>
+              <td class="table-vertical-border">4</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.12254901960784313%, var(--bs-table-bg) 0.12254901960784313%)">
+                4
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-8">
+              <td>internal/task</td>
+              <td class="table-vertical-border">282</td>
+              <td>48</td>
+              <td>8</td>
+              <td>4</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 10.355392156862745%, var(--bs-table-bg) 10.355392156862745%)">
+                338
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-8">
+              <td class="ps-4">
+                
+                  queue.go
+                
+              </td>
+              <td class="table-vertical-border">62</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.8995098039215685%, var(--bs-table-bg) 1.8995098039215685%)">
+                62
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-8">
+              <td class="ps-4">
+                
+                  task_stack.go
+                
+              </td>
+              <td class="table-vertical-border">42</td>
+              <td>0</td>
+              <td>8</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.531862745098039%, var(--bs-table-bg) 1.531862745098039%)">
+                50
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-8">
+              <td class="ps-4">
+                
+                  task_stack_cortexm.S
+                
+              </td>
+              <td class="table-vertical-border">64</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.9607843137254901%, var(--bs-table-bg) 1.9607843137254901%)">
+                64
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-8">
+              <td class="ps-4">
+                
+                  task_stack_cortexm.go
+                
+              </td>
+              <td class="table-vertical-border">34</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.0416666666666665%, var(--bs-table-bg) 1.0416666666666665%)">
+                34
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-8">
+              <td class="ps-4">
+                
+                  task_stack_unicore.go
+                
+              </td>
+              <td class="table-vertical-border">80</td>
+              <td>48</td>
+              <td>0</td>
+              <td>4</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 3.9215686274509802%, var(--bs-table-bg) 3.9215686274509802%)">
+                128
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-9">
+              <td>machine</td>
+              <td class="table-vertical-border">204</td>
+              <td>0</td>
+              <td>0</td>
+              <td>130</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 6.25%, var(--bs-table-bg) 6.25%)">
+                204
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  (unknown file)
+                
+              </td>
+              <td class="table-vertical-border">0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>130</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0%, var(--bs-table-bg) 0%)">
+                0
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  board_embedfire_py32f030.go
+                
+              </td>
+              <td class="table-vertical-border">10</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.30637254901960786%, var(--bs-table-bg) 0.30637254901960786%)">
+                10
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  buffer.go
+                
+              </td>
+              <td class="table-vertical-border">16</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.49019607843137253%, var(--bs-table-bg) 0.49019607843137253%)">
+                16
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  machine.go
+                
+              </td>
+              <td class="table-vertical-border">12</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.3676470588235294%, var(--bs-table-bg) 0.3676470588235294%)">
+                12
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  machine_py32_pin.go
+                
+              </td>
+              <td class="table-vertical-border">84</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 2.5735294117647056%, var(--bs-table-bg) 2.5735294117647056%)">
+                84
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  machine_py32_pin_afrh.go
+                
+              </td>
+              <td class="table-vertical-border">6</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.1838235294117647%, var(--bs-table-bg) 0.1838235294117647%)">
+                6
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  machine_py32_uart.go
+                
+              </td>
+              <td class="table-vertical-border">32</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.9803921568627451%, var(--bs-table-bg) 0.9803921568627451%)">
+                32
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  serial-uart.go
+                
+              </td>
+              <td class="table-vertical-border">36</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.1029411764705883%, var(--bs-table-bg) 1.1029411764705883%)">
+                36
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-9">
+              <td class="ps-4">
+                
+                  uart.go
+                
+              </td>
+              <td class="table-vertical-border">8</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.24509803921568626%, var(--bs-table-bg) 0.24509803921568626%)">
+                8
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-10">
+              <td>main</td>
+              <td class="table-vertical-border">248</td>
+              <td>37</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 8.731617647058822%, var(--bs-table-bg) 8.731617647058822%)">
+                285
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-10">
+              <td class="ps-4">
+                
+                  main.go
+                
+              </td>
+              <td class="table-vertical-border">248</td>
+              <td>37</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 8.731617647058822%, var(--bs-table-bg) 8.731617647058822%)">
+                285
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-11">
+              <td>runtime</td>
+              <td class="table-vertical-border">854</td>
+              <td>85</td>
+              <td>0</td>
+              <td>40</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 28.768382352941174%, var(--bs-table-bg) 28.768382352941174%)">
+                939
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  (unknown file)
+                
+              </td>
+              <td class="table-vertical-border">0</td>
+              <td>83</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 2.542892156862745%, var(--bs-table-bg) 2.542892156862745%)">
+                83
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  arch_cortexm.go
+                
+              </td>
+              <td class="table-vertical-border">6</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.1838235294117647%, var(--bs-table-bg) 0.1838235294117647%)">
+                6
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  gc_leaking.go
+                
+              </td>
+              <td class="table-vertical-border">86</td>
+              <td>0</td>
+              <td>0</td>
+              <td>20</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 2.6348039215686274%, var(--bs-table-bg) 2.6348039215686274%)">
+                86
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  panic.go
+                
+              </td>
+              <td class="table-vertical-border">80</td>
+              <td>2</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 2.5122549019607843%, var(--bs-table-bg) 2.5122549019607843%)">
+                82
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  print.go
+                
+              </td>
+              <td class="table-vertical-border">196</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 6.004901960784314%, var(--bs-table-bg) 6.004901960784314%)">
+                196
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  runtime.go
+                
+              </td>
+              <td class="table-vertical-border">6</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.1838235294117647%, var(--bs-table-bg) 0.1838235294117647%)">
+                6
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  runtime_cortexm.go
+                
+              </td>
+              <td class="table-vertical-border">52</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.5931372549019607%, var(--bs-table-bg) 1.5931372549019607%)">
+                52
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  runtime_cortexm_abort.go
+                
+              </td>
+              <td class="table-vertical-border">4</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 0.12254901960784313%, var(--bs-table-bg) 0.12254901960784313%)">
+                4
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  runtime_cortexm_hardfault.go
+                
+              </td>
+              <td class="table-vertical-border">48</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 1.4705882352941175%, var(--bs-table-bg) 1.4705882352941175%)">
+                48
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  runtime_py32.go
+                
+              </td>
+              <td class="table-vertical-border">120</td>
+              <td>0</td>
+              <td>0</td>
+              <td>8</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 3.6764705882352944%, var(--bs-table-bg) 3.6764705882352944%)">
+                120
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-11">
+              <td class="ps-4">
+                
+                  scheduler_cooperative.go
+                
+              </td>
+              <td class="table-vertical-border">256</td>
+              <td>0</td>
+              <td>0</td>
+              <td>12</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 7.8431372549019605%, var(--bs-table-bg) 7.8431372549019605%)">
+                256
+              </td>
+            </tr>
+            
+            
+            <tr class="row-package" data-collapse=".collapse-row-12">
+              <td>runtime/volatile</td>
+              <td class="table-vertical-border">296</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 9.068627450980392%, var(--bs-table-bg) 9.068627450980392%)">
+                296
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-12">
+              <td class="ps-4">
+                
+                  register.go
+                
+              </td>
+              <td class="table-vertical-border">94</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 2.8799019607843137%, var(--bs-table-bg) 2.8799019607843137%)">
+                94
+              </td>
+            </tr>
+            
+            <tr class="table-secondary collapse collapse-row-12">
+              <td class="ps-4">
+                
+                  volatile.go
+                
+              </td>
+              <td class="table-vertical-border">202</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="table-vertical-border" style="background: linear-gradient(to right, var(--bs-info-bg-subtle) 6.188725490196079%, var(--bs-table-bg) 6.188725490196079%)">
+                202
+              </td>
+            </tr>
+            
+            
+          </tbody>
+          <tfoot class="table-group-divider">
+            <tr>
+              <th>Total</th>
+              <td class="table-vertical-border">2890</td>
+              <td>366</td>
+              <td>8</td>
+              <td>704</td>
+              <td class="table-vertical-border">3264</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <script>
+
+for (let clickable of document.querySelectorAll('.row-package')) {
+  clickable.addEventListener('click', e => {
+    for (let row of document.querySelectorAll(clickable.dataset.collapse)) {
+      row.classList.toggle('show');
+    }
+  });
+}
+    </script>
+  </body>
+</html>
