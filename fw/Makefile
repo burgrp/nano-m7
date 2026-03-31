@@ -9,6 +9,7 @@ CMSIS_PACK = PY32F030
 IMAGE=image.elf
 
 build:
+# none, leaking, conservative, custom, precise, boehm
 	tinygo build --size html --serial uart --scheduler tasks --gc leaking --target ${TARGET_TINYGO} -o ${IMAGE} main.go
 
 flash: build
