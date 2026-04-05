@@ -139,8 +139,6 @@ Communication between NanoDLP (Raspberry Pi) and MCU is via UART at 115200 baud 
 | `M820` | `S<ms>` | Set system check interval in ms (default 1000) |
 | `M114` | — | Report Z position (Z:n), endstop (ES:0/1), button (BTN:0/1), temperature (NTC:n) |
 
-> Note: Enable lamp power (`M800 S1`) before firing `M106`, and cut it after (`M800 S0`).
-
 ## Verified
 
 - BHTM08 works correctly with DBM101M14K01
