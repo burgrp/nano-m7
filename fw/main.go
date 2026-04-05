@@ -2,6 +2,7 @@ package main
 
 import (
 	"device/py32"
+	"errors"
 	"machine"
 	"runtime"
 	"strconv"
@@ -37,7 +38,17 @@ func main() {
 	reader := stdio.NewReader()
 
 	go healthCheck(writer)
-	err := gcode.Handle(reader, writer)
+
+	commands := gcode.Commands{
+		"G0": func(args map[string]int) (string, error) {
+			return "G0 command executed", nil
+		},
+		"G1": func(args map[string]int) (string, error) {
+			return "", errors.New("Nazdar")
+		},
+	}
+
+	err := gcode.Handle(reader, writer, commands)
 	if err != nil {
 		panic("GCODE handler exited")
 	}
