@@ -1,3 +1,6 @@
 board/production
 board/bom
 board/*-backups
+fw/disassembly.txt
+fw/image.elf
+fw/size-report.html

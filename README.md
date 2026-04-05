@@ -98,6 +98,51 @@ Coordinates are XY in mm, origin at top-left corner of the board.
 | PRO model interface | JST 2mm | 8 | 116, 50 | Interface for PRO variant (function TBD) |
 | WiFi | IPX | 1 | 80, 60 | WiFi module connector |
 
+## Nano-M7 Controller Board (nano-m7.kicad_sch)
+
+Custom MCU board based on PY32F030K1xTx bridging the Raspberry Pi / NanoDLP controller to the printer's peripherals.
+
+### MCU Pin Assignment
+
+| GPIO | Net | Direction | Function |
+|------|-----|-----------|----------|
+| PF0 | Crystal | — | 16 MHz HSE in |
+| PF1 | Crystal | — | 16 MHz HSE out |
+| PF2 | NRST | — | Reset |
+| PF3 | LAMP_NTC_MCU | IN | NTC thermistor ADC |
+| PA0 | I2C_SDA | I/O | Build platform sensor |
+| PA3 | I2C_SCL | I/O | Build platform sensor |
+| PA4 | Z_STOP_LOW | IN | Z-axis min endstop |
+| PA5 | FP_BTN | IN | Front panel button |
+| PA7 | LAMP_PWM | OUT | UV lamp PWM |
+| PA8 | ZS_STEP | OUT | Z stepper STEP |
+| PA9 | PY_RXD | IN | UART RX from Raspberry Pi |
+| PA10 | PY_TXD | OUT | UART TX to Raspberry Pi |
+| PB0 | LAMP_FAN_MCU | OUT | Lamp fan P-MOS gate |
+| PB1 | LED | OUT | Status LED |
+| PB3 | ZS_DIR | OUT | Z stepper DIR |
+| PB4 | FP_LED | OUT | Front panel LED |
+| PB5 | LAMP_POWER_MCU | OUT | UV lamp power P-MOS gate |
+
+### GCODE Interface
+
+Communication between NanoDLP (Raspberry Pi) and MCU is via UART at 115200 baud (PA9/PA10).
+
+| Command | Parameters | GPIO | Description |
+|---------|-----------|------|-------------|
+| `G28 Z` | — | PA4, PA8, PB3 | Home Z axis to min endstop |
+| `G1` | `Z<mm> F<mm/min>` | PA8, PB3 | Move Z to absolute position |
+| `M105` | — | PF3 | Report NTC temperature |
+| `M106` | `S<0-255>` | PA7 | Set UV lamp PWM intensity |
+| `M107` | — | PA7, PB5 | UV lamp off (PWM=0, cut power) |
+| `M119` | — | PA4, PA5 | Report endstop and button states |
+| `M800` | `S<0/1>` | PB5 | UV lamp power enable (P-MOS) |
+| `M801` | `S<0/1>` | PB0 | Lamp fan enable (P-MOS) |
+| `M42` | `P0 S<0/1>` | PB4 | Front panel LED on/off |
+| `M900` | `S<ms>` | PB1 | Set onboard LED blink interval in ms (default 500) |
+
+> Note: Enable lamp power (`M800 S1`) before firing `M106`, and cut it after (`M800 S0`).
+
 ## Verified
 
 - BHTM08 works correctly with DBM101M14K01

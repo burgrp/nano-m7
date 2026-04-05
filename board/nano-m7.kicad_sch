@@ -6338,7 +6338,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22p"
+		(property "Value" "18p"
 			(at 39.624 58.928 90)
 			(effects
 				(font
@@ -6738,7 +6738,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22p"
+		(property "Value" "18p"
 			(at 39.624 50.038 90)
 			(effects
 				(font
@@ -9193,7 +9193,7 @@
 				)
 			)
 		)
-		(property "Value" "12MHz"
+		(property "Value" "16MHz"
 			(at 47.498 54.61 90)
 			(effects
 				(font

@@ -7,29 +7,137 @@ import (
 	"time"
 )
 
-var leds = []machine.Pin{machine.PB1}
-
 const (
 	pinUartRx = machine.PA9
 	pinUartTx = machine.PA10
 	pinLed    = machine.PB1
+	// pinUartRx = machine.PA8
+	// pinUartTx = machine.PA7
+	// pinLed    = machine.PA3
 )
+
+var blinkInterval = 500 * time.Millisecond
 
 func main() {
 	setClockToHSE16MHz()
+	machine.ConfigureUARTPin(pinUartRx, 8)
+	machine.ConfigureUARTPin(pinUartTx, 8)
+	machine.DefaultUART.Configure(machine.UARTConfig{})
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
+	println("Hello, Py32!")
+
+	go handleUART()
+
 	for {
-		time.Sleep(500 * time.Millisecond)
-		var m runtime.MemStats
-		runtime.ReadMemStats(&m)
-		println("-------------------")
-		println("Alloc:", m.Alloc)
-		println("Sys:", m.Sys)
-		println("Mallocs:", m.Mallocs)
+		time.Sleep(blinkInterval)
 		pinLed.Set(!pinLed.Get())
+
+		// var m runtime.MemStats
+		// runtime.ReadMemStats(&m)
+		// print("; Alloc=")
+		// print(m.Alloc)
+		// print(" Sys=")
+		// print(m.Sys)
+		// print(" Mallocs=")
+		// println(m.Mallocs)
 	}
+}
+
+var (
+	buf  [32]byte
+	bufN int
+)
+
+// handleUART drains the ring buffer filled by the UART ISR.
+// Called from the main loop — no goroutine or Gosched needed.
+func handleUART() {
+	for {
+		b, ok := machine.Serial.Buffer.Get()
+		if ok {
+			// print("uart: ")
+			//println(b)
+			//print(',')
+			machine.Serial.WriteByte('.')
+			machine.Serial.WriteByte(b)
+		}
+
+		runtime.Gosched()
+		//time.Sleep(10000 * time.Microsecond)
+	}
+	// if b == '\n' || b == '\r' {
+	// 	if bufN > 0 {
+	// 		processGcode(buf[:bufN])
+	// 		bufN = 0
+	// 	}
+	// } else if bufN < len(buf)-1 {
+	// 	buf[bufN] = b
+	// 	bufN++
+	// }
+
+	// for machine.Serial.Buffered() > 0 {
+	// 	b, _ := machine.Serial.ReadByte()
+	// 	print("uart: ")
+	// 	println(b)
+	// 	// if b == '\n' || b == '\r' {
+	// 	// 	if bufN > 0 {
+	// 	// 		processGcode(buf[:bufN])
+	// 	// 		bufN = 0
+	// 	// 	}
+	// 	// } else if bufN < len(buf)-1 {
+	// 	// 	buf[bufN] = b
+	// 	// 	bufN++
+	// 	// }
+	// }
+}
+
+// processGcode handles a single GCODE line (no trailing newline).
+func processGcode(line []byte) {
+	// M900 S<ms> — set LED blink interval
+	if hasPrefix(line, "M900") {
+		ms := parseParam(line, 'S')
+		if ms > 0 {
+			blinkInterval = time.Duration(ms) * time.Millisecond
+			println("ok")
+			return
+		}
+		println("error")
+		return
+	}
+	println("ok")
+}
+
+// hasPrefix checks if b starts with the ASCII prefix p.
+func hasPrefix(b []byte, p string) bool {
+	if len(b) < len(p) {
+		return false
+	}
+	for i := 0; i < len(p); i++ {
+		if b[i] != p[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// parseParam finds parameter letter (e.g. 'S') and parses its integer value.
+// Returns 0 if not found or invalid.
+func parseParam(line []byte, param byte) int32 {
+	for i := 0; i < len(line); i++ {
+		if line[i] == param && i+1 < len(line) {
+			var v int32
+			for j := i + 1; j < len(line); j++ {
+				c := line[j]
+				if c < '0' || c > '9' {
+					break
+				}
+				v = v*10 + int32(c-'0')
+			}
+			return v
+		}
+	}
+	return 0
 }
 
 func setClockToHSE16MHz() {
@@ -49,7 +157,4 @@ func setClockToHSE16MHz() {
 	// Update the frequency variable and re-initialize dependents
 	machine.CPUFrequencyHz = 16_000_000
 	runtime.ConfigureSystemTimer()
-	machine.ConfigureUARTPin(pinUartRx, 8)
-	machine.ConfigureUARTPin(pinUartTx, 8)
-	machine.DefaultUART.Configure(machine.UARTConfig{})
 }
