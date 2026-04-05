@@ -2,14 +2,14 @@
 
 ## Overview
 
-Modification of the Anycubic Photon Mono M7 SLA printer to run NanoDLP. The original mainboard is replaced with a Raspberry Pi, NanoDLP Controller Board, and BHTM08 display driver. All mechanical parts and most electrical components are reused.
+Modification of the Anycubic Photon Mono M7 SLA printer to run NanoDLP. The original mainboard is replaced with a Raspberry Pi, a custom Nano-M7 controller board, and BHTM08 display driver. All mechanical parts and most electrical components are reused.
 
 ## Electronics
 
 ### Replaced
 | Component | Replacement |
 |-----------|-------------|
-| Original mainboard | Raspberry Pi + NanoDLP Controller Board + BHTM08 |
+| Original mainboard | Raspberry Pi + Nano-M7 controller board + BHTM08 |
 
 ### Reused
 - Display (DBM101M14K01) — driven by BHTM08 instead of original board
@@ -32,19 +32,12 @@ Modification of the Anycubic Photon Mono M7 SLA printer to run NanoDLP. The orig
 
 ### CPU: Raspberry Pi
 - Model TBD (Pi 4B or Pi 5 recommended for 14K image processing performance)
-- Connected to NanoDLP Controller Board via wires/cables
+- Connected to Nano-M7 controller board via UART
 
-### NanoDLP Controller Board
-- [Standalone board by nano3dtech.com](https://www.nano3dtech.com/nanodlp-controller-board), connected to Raspberry Pi via wires
-- Powers the Raspberry Pi (Pi should not have separate power supply)
-- TMC2209 integrated stepper driver (Z-axis)
-- HDMI output → BHTM08 → display
-- Ethernet port (preferred over WiFi)
-- Power input: 12-24V, 5-20A (reuse original M7 PSU)
-- UV LED driver connector
-- Limit switch inputs (min endstop required, max optional)
-- 5x fan connectors
-- Comes with 8GB SD card pre-loaded with NanoDLP
+### Nano-M7 Controller Board
+- Custom board with connectors matching the original M7 control board for easy wiring
+- PY32F030 MCU bridging the Raspberry Pi to printer peripherals
+- See [Nano-M7 Controller Board](#nano-m7-controller-board-nano-m7kicad_sch) section for details
 
 ## Display: DBM101M14K01
 
