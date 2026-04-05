@@ -14,25 +14,35 @@ import (
 )
 
 const (
-	pinUartRx  = machine.PA9
-	pinUartTx  = machine.PA10
-	pinLed     = machine.PB1
-	pinLampFan = machine.PA7
-	// pinUartRx = machine.PA8
-	// pinUartTx = machine.PA7
-	// pinLed    = machine.PA3
+	// pinUartRx  = machine.PA9
+	// pinUartTx  = machine.PA10
+	// pinLed     = machine.PB1
+	// pinLampFan = machine.PA7
+	// pinLampPower = machine.PB3
+	// pinLampPwm   = machine.PA6
+	// pinLampPwmAf = 1
+	pinUartRx    = machine.PA8
+	pinUartTx    = machine.PA7
+	pinLampPwm   = machine.PA2
+	pinLampPwmAf = 13
+	pinLed       = machine.PA3
+	pinLampFan   = machine.PA4
+	pinLampPower = machine.PB3
 )
 
 var healthCheckInterval = 1000 * time.Millisecond
 
 func main() {
-	setClockToHSE16MHz()
+	//setClockToHSE16MHz()
 	machine.ConfigureUARTPin(pinUartRx, 8)
 	machine.ConfigureUARTPin(pinUartTx, 8)
 	machine.DefaultUART.Configure(machine.UARTConfig{})
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
 	pinLampFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	pinLampPower.Configure(machine.PinConfig{Mode: machine.PinOutput})
+
+	initLampPwm()
 
 	println("Hello, Py32!")
 
@@ -42,6 +52,15 @@ func main() {
 	go healthCheck(writer)
 
 	commands := gcode.Commands{
+		"M106": func(args map[string]int) (string, error) {
+			setLampPwm(args["S"])
+			return "", nil
+		},
+		"M800": func(args map[string]int) (string, error) {
+			state := args["S"] == 1
+			pinLampPower.Set(state)
+			return "", nil
+		},
 		"M801": func(args map[string]int) (string, error) {
 			state := args["S"] == 1
 			pinLampFan.Set(state)

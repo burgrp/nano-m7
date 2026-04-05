@@ -8,7 +8,7 @@ test:
 	go test ./gcode/ ./line/
 
 build:
-	tinygo build --size full --serial uart --scheduler tasks --gc conservative --target ${TARGET_TINYGO} -o ${IMAGE} main.go
+	tinygo build --size full --serial uart --scheduler tasks --gc conservative --target ${TARGET_TINYGO} -o ${IMAGE} .
 
 flash: build
 	pyocd load -t ${TARGET_PYOCD} ${IMAGE}
