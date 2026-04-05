@@ -40,11 +40,13 @@ func main() {
 	go healthCheck(writer)
 
 	commands := gcode.Commands{
-		"G0": func(args map[string]int) (string, error) {
-			return "G0 command executed", nil
-		},
-		"G1": func(args map[string]int) (string, error) {
-			return "", errors.New("Nazdar")
+		"M900": func(args map[string]int) (string, error) {
+			intervalMs := args["S"]
+			if intervalMs <= 0 {
+				return "", errors.New("invalid interval")
+			}
+			healthCheckInterval = time.Duration(intervalMs) * time.Millisecond
+			return "", nil
 		},
 	}
 
