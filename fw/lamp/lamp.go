@@ -78,3 +78,7 @@ func (l *Lamp) SetFan(on bool) {
 func (l *Lamp) SetPower(on bool) {
 	l.pinFan.Set(on)
 }
+
+func (l *Lamp) GetLampTempC() int {
+	return 22
+}

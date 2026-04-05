@@ -10,8 +10,10 @@ import (
 	"github.com/burgrp/nano-m7/fw/gcode"
 	"github.com/burgrp/nano-m7/fw/lamp"
 	"github.com/burgrp/nano-m7/fw/panel"
+	report "github.com/burgrp/nano-m7/fw/reporter"
 	"github.com/burgrp/nano-m7/fw/stdio"
 	"github.com/burgrp/nano-m7/fw/syscheck"
+	"github.com/burgrp/nano-m7/fw/zaxis"
 )
 
 const (
@@ -30,6 +32,8 @@ const (
 	pinLampPwm       = machine.PA2
 	pinLampPwmAf     = 13
 	pinFrontPanelLed = machine.PA4
+	pinFrontPanelBtn = machine.PA5
+	pinZEndStop      = machine.PA6
 )
 
 func main() {
@@ -49,9 +53,29 @@ func main() {
 
 	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, py32.TIM3)
 	sysCheck := syscheck.NewSysCheck(pinLed, writer)
-	frontPanel := panel.NewFrontPanel(pinFrontPanelLed)
+	frontPanel := panel.NewFrontPanel(pinFrontPanelLed, pinFrontPanelBtn)
+	zAxis := zaxis.NewZAxis(pinZEndStop)
+
+	reporter := report.NewReporter(frontPanel, lamp, zAxis)
 
 	commands := gcode.Commands{
+		"G1": func(args map[string]int) (string, error) {
+			if z, ok := args["Z"]; ok {
+				f := args["F"]
+				if f <= 0 {
+					return "", errors.New("invalid feedrate")
+				}
+				zAxis.MoveTo(z, f)
+			}
+			return "", nil
+		},
+		"G28": func(args map[string]int) (string, error) {
+			zAxis.MoveHome()
+			return "", nil
+		},
+		"M114": func(args map[string]int) (string, error) {
+			return reporter.Report()
+		},
 		"M800": func(args map[string]int) (string, error) {
 			state := args["S"] == 1
 			lamp.SetFan(state)

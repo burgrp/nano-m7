@@ -3,19 +3,30 @@ package panel
 import "machine"
 
 type FrontPanel struct {
-	pinLed machine.Pin
+	pinLed    machine.Pin
+	pinButton machine.Pin
 }
 
-func NewFrontPanel(pinLed machine.Pin) *FrontPanel {
+type Reporter interface {
+	SetFrontPanelButton(state bool)
+}
+
+func NewFrontPanel(pinLed, pinButton machine.Pin) *FrontPanel {
 	p := &FrontPanel{
-		pinLed: pinLed,
+		pinLed:    pinLed,
+		pinButton: pinButton,
 	}
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	pinButton.Configure(machine.PinConfig{Mode: machine.PinInput})
 
 	return p
 }
 
 func (p *FrontPanel) SetLed(state bool) {
 	p.pinLed.Set(state)
+}
+
+func (p *FrontPanel) GetFrontPanelButton() bool {
+	return p.pinButton.Get()
 }
