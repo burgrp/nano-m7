@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	pinUartRx = machine.PA9
-	pinUartTx = machine.PA10
-	pinLed    = machine.PB1
+	pinUartRx  = machine.PA9
+	pinUartTx  = machine.PA10
+	pinLed     = machine.PB1
+	pinLampFan = machine.PA7
 	// pinUartRx = machine.PA8
 	// pinUartTx = machine.PA7
 	// pinLed    = machine.PA3
@@ -31,6 +32,7 @@ func main() {
 	machine.DefaultUART.Configure(machine.UARTConfig{})
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	pinLampFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
 	println("Hello, Py32!")
 
@@ -40,6 +42,11 @@ func main() {
 	go healthCheck(writer)
 
 	commands := gcode.Commands{
+		"M801": func(args map[string]int) (string, error) {
+			state := args["S"] == 1
+			pinLampFan.Set(state)
+			return "", nil
+		},
 		"M900": func(args map[string]int) (string, error) {
 			intervalMs := args["S"]
 			if intervalMs <= 0 {

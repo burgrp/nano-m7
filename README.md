@@ -109,20 +109,20 @@ Custom MCU board based on PY32F030K1xTx bridging the Raspberry Pi / NanoDLP cont
 | PF0 | Crystal | — | 16 MHz HSE in |
 | PF1 | Crystal | — | 16 MHz HSE out |
 | PF2 | NRST | — | Reset |
-| PF3 | LAMP_NTC_MCU | IN | NTC thermistor ADC |
-| PA0 | I2C_SDA | I/O | Build platform sensor |
+| PA0 | LAMP_NTC_MCU | IN | NTC thermistor ADC |
+| PA2 | I2C_SDA | I/O | Build platform sensor |
 | PA3 | I2C_SCL | I/O | Build platform sensor |
 | PA4 | Z_STOP_LOW | IN | Z-axis min endstop |
 | PA5 | FP_BTN | IN | Front panel button |
-| PA7 | LAMP_PWM | OUT | UV lamp PWM |
+| PA6 | LAMP_PWM | OUT | UV lamp PWM |
+| PA7 | LAMP_FAN_MCU | OUT | Lamp fan P-MOS gate |
 | PA8 | ZS_STEP | OUT | Z stepper STEP |
 | PA9 | PY_RXD | IN | UART RX from Raspberry Pi |
 | PA10 | PY_TXD | OUT | UART TX to Raspberry Pi |
-| PB0 | LAMP_FAN_MCU | OUT | Lamp fan P-MOS gate |
 | PB1 | LED | OUT | Status LED |
-| PB3 | ZS_DIR | OUT | Z stepper DIR |
-| PB4 | FP_LED | OUT | Front panel LED |
-| PB5 | LAMP_POWER_MCU | OUT | UV lamp power P-MOS gate |
+| PB3 | LAMP_POWER_MCU | OUT | UV lamp power P-MOS gate |
+| PB4 | ZS_DIR | OUT | Z stepper DIR |
+| PB5 | FP_LED | OUT | Front panel LED |
 
 ### GCODE Interface
 
