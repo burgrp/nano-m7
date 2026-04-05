@@ -5,13 +5,12 @@ import (
 	"errors"
 	"machine"
 	"runtime"
-	"strconv"
 	"time"
 
 	"github.com/burgrp/nano-m7/fw/gcode"
 	"github.com/burgrp/nano-m7/fw/lamp"
-	"github.com/burgrp/nano-m7/fw/line"
 	"github.com/burgrp/nano-m7/fw/stdio"
+	"github.com/burgrp/nano-m7/fw/syscheck"
 )
 
 const (
@@ -31,8 +30,6 @@ const (
 	pinLampPower = machine.PB3
 )
 
-var healthCheckInterval = 1000 * time.Millisecond
-
 func main() {
 	//setClockToHSE16MHz()
 	machine.ConfigureUARTPin(pinUartRx, 8)
@@ -41,14 +38,13 @@ func main() {
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
-	lamp.Init(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf)
-
-	println("Hello, Py32!")
-
 	writer := stdio.NewWriter()
 	reader := stdio.NewReader()
 
-	go healthCheck(writer)
+	writer.Write("; NANO-M7")
+
+	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf)
+	sysCheck := syscheck.NewSysCheck(pinLed, writer)
 
 	commands := gcode.Commands{
 		"M106": func(args map[string]int) (string, error) {
@@ -70,7 +66,7 @@ func main() {
 			if intervalMs <= 0 {
 				return "", errors.New("invalid interval")
 			}
-			healthCheckInterval = time.Duration(intervalMs) * time.Millisecond
+			sysCheck.SetInterval(time.Duration(intervalMs) * time.Millisecond)
 			return "", nil
 		},
 	}
@@ -80,17 +76,6 @@ func main() {
 		panic("GCODE handler exited")
 	}
 
-}
-
-func healthCheck(writer line.Writer) {
-	for {
-		time.Sleep(healthCheckInterval)
-		pinLed.Set(!pinLed.Get())
-
-		var m runtime.MemStats
-		runtime.ReadMemStats(&m)
-		_ = writer.Write("; Alloc=" + strconv.Itoa(int(m.Alloc)) + " Sys=" + strconv.Itoa(int(m.Sys)) + " Mallocs=" + strconv.Itoa(int(m.Mallocs)))
-	}
 }
 
 func setClockToHSE16MHz() {

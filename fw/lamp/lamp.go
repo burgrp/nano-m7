@@ -5,21 +5,23 @@ import (
 	"machine"
 )
 
+type Lamp struct {
+	pwmPeriod uint32
+	pinFan    machine.Pin
+	pinPower  machine.Pin
+}
+
 const lampPwmTargetHz = 1000
 
-// lampPwmPeriod holds the ARR value set during initLampPwm,
-// used by setLampPwm to compute the compare value.
-var lampPwmPeriod uint32
+func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8) *Lamp {
 
-var pinFan, pinPower machine.Pin
+	lamp := &Lamp{
+		pinFan:   pinFan,
+		pinPower: pinPower,
+	}
 
-func Init(pinLampFan, pinLampPower, pinLampPwm machine.Pin, pinLampPwmAf uint8) {
-
-	pinFan = pinLampFan
-	pinPower = pinLampPower
-
-	pinLampFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
-	pinLampPower.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	pinFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	pinPower.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
 	// Compute prescaler and period to hit lampPwmTargetHz.
 	// timer_freq = CPU / (PSC+1), PWM_freq = timer_freq / (ARR+1)
@@ -27,11 +29,11 @@ func Init(pinLampFan, pinLampPower, pinLampPwm machine.Pin, pinLampPwmAf uint8) 
 	total := machine.CPUFrequency() / lampPwmTargetHz
 	psc := (total - 1) / 65536 // smallest PSC that keeps ARR ≤ 65535
 	arr := total/(psc+1) - 1
-	lampPwmPeriod = arr
+	lamp.pwmPeriod = arr
 
 	// Configure pin as TIM3_CH1 alternate function
-	pinLampPwm.Configure(machine.PinConfig{Mode: machine.PinAlternate})
-	pinLampPwm.SetAltFunc(pinLampPwmAf)
+	pinPwm.Configure(machine.PinConfig{Mode: machine.PinAlternate})
+	pinPwm.SetAltFunc(pinPwmAf)
 
 	// Enable TIM3 peripheral clock
 	py32.RCC.APBENR1.SetBits(py32.RCC_APBENR1_TIM3EN)
@@ -54,24 +56,26 @@ func Init(pinLampFan, pinLampPower, pinLampPwm machine.Pin, pinLampPwmAf uint8) 
 
 	// Start the counter
 	py32.TIM3.CR1.SetBits(py32.TIM_CR1_CEN)
+
+	return lamp
 }
 
 // setLampPwm sets the lamp brightness. s is in the range 0–255 (Marlin M106 convention).
-func SetPwm(s int) {
+func (l *Lamp) SetPwm(s int) {
 	switch {
 	case s <= 0:
 		py32.TIM3.CCR1.Set(0)
 	case s >= 255:
-		py32.TIM3.CCR1.Set(lampPwmPeriod + 1)
+		py32.TIM3.CCR1.Set(l.pwmPeriod + 1)
 	default:
-		py32.TIM3.CCR1.Set(uint32(s) * (lampPwmPeriod + 1) / 255)
+		py32.TIM3.CCR1.Set(uint32(s) * (l.pwmPeriod + 1) / 255)
 	}
 }
 
-func SetFan(on bool) {
-	pinPower.Set(on)
+func (l *Lamp) SetFan(on bool) {
+	l.pinPower.Set(on)
 }
 
-func SetPower(on bool) {
-	pinFan.Set(on)
+func (l *Lamp) SetPower(on bool) {
+	l.pinFan.Set(on)
 }
