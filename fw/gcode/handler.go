@@ -6,7 +6,9 @@ import (
 	"github.com/burgrp/nano-m7/fw/line"
 )
 
-func Handle(reader line.Reader, writer line.Writer) error {
+type Commands map[string]func(args map[string]int)
+
+func Handle(reader line.Reader, writer line.Writer, commands Commands) error {
 	for {
 		line, err := reader.Read()
 		if err != nil {
