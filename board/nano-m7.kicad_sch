@@ -3671,6 +3671,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "upravy:\n- nový zdroj 5V\n- 3V3 stačí LDO (LM1117)\n"
+		(exclude_from_sim no)
+		(at 106.172 97.028 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8014c911-47c4-4c13-9fea-362373d399cb")
+	)
 	(junction
 		(at 50.8 45.72)
 		(diameter 0)
