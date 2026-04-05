@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/burgrp/nano-m7/fw/gcode"
+	"github.com/burgrp/nano-m7/fw/lamp"
 	"github.com/burgrp/nano-m7/fw/line"
 	"github.com/burgrp/nano-m7/fw/stdio"
 )
@@ -39,10 +40,8 @@ func main() {
 	machine.DefaultUART.Configure(machine.UARTConfig{})
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
-	pinLampFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
-	pinLampPower.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
-	initLampPwm()
+	lamp.Init(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf)
 
 	println("Hello, Py32!")
 
@@ -53,17 +52,17 @@ func main() {
 
 	commands := gcode.Commands{
 		"M106": func(args map[string]int) (string, error) {
-			setLampPwm(args["S"])
+			lamp.SetPwm(args["S"])
 			return "", nil
 		},
 		"M800": func(args map[string]int) (string, error) {
 			state := args["S"] == 1
-			pinLampPower.Set(state)
+			lamp.SetPower(state)
 			return "", nil
 		},
 		"M801": func(args map[string]int) (string, error) {
 			state := args["S"] == 1
-			pinLampFan.Set(state)
+			lamp.SetFan(state)
 			return "", nil
 		},
 		"M900": func(args map[string]int) (string, error) {

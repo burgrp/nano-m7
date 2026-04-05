@@ -1,6 +1,4 @@
-//go:build tinygo
-
-package main
+package lamp
 
 import (
 	"device/py32"
@@ -13,7 +11,16 @@ const lampPwmTargetHz = 1000
 // used by setLampPwm to compute the compare value.
 var lampPwmPeriod uint32
 
-func initLampPwm() {
+var pinFan, pinPower machine.Pin
+
+func Init(pinLampFan, pinLampPower, pinLampPwm machine.Pin, pinLampPwmAf uint8) {
+
+	pinFan = pinLampFan
+	pinPower = pinLampPower
+
+	pinLampFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	pinLampPower.Configure(machine.PinConfig{Mode: machine.PinOutput})
+
 	// Compute prescaler and period to hit lampPwmTargetHz.
 	// timer_freq = CPU / (PSC+1), PWM_freq = timer_freq / (ARR+1)
 	// → (PSC+1)*(ARR+1) = CPU / target
@@ -50,7 +57,7 @@ func initLampPwm() {
 }
 
 // setLampPwm sets the lamp brightness. s is in the range 0–255 (Marlin M106 convention).
-func setLampPwm(s int) {
+func SetPwm(s int) {
 	switch {
 	case s <= 0:
 		py32.TIM3.CCR1.Set(0)
@@ -59,4 +66,12 @@ func setLampPwm(s int) {
 	default:
 		py32.TIM3.CCR1.Set(uint32(s) * (lampPwmPeriod + 1) / 255)
 	}
+}
+
+func SetFan(on bool) {
+	pinPower.Set(on)
+}
+
+func SetPower(on bool) {
+	pinFan.Set(on)
 }
