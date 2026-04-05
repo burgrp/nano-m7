@@ -9,6 +9,7 @@ import (
 
 	"github.com/burgrp/nano-m7/fw/gcode"
 	"github.com/burgrp/nano-m7/fw/lamp"
+	"github.com/burgrp/nano-m7/fw/panel"
 	"github.com/burgrp/nano-m7/fw/stdio"
 	"github.com/burgrp/nano-m7/fw/syscheck"
 )
@@ -21,13 +22,14 @@ const (
 	// pinLampPower = machine.PB3
 	// pinLampPwm   = machine.PA6
 	// pinLampPwmAf = 1
-	pinUartRx    = machine.PA8
-	pinUartTx    = machine.PA7
-	pinLed       = machine.PA3
-	pinLampFan   = machine.PA4
-	pinLampPower = machine.PB3
-	pinLampPwm   = machine.PA2
-	pinLampPwmAf = 13
+	pinUartRx        = machine.PA8
+	pinUartTx        = machine.PA7
+	pinLed           = machine.PA3
+	pinLampFan       = machine.PB3
+	pinLampPower     = machine.PB4
+	pinLampPwm       = machine.PA2
+	pinLampPwmAf     = 13
+	pinFrontPanelLed = machine.PA4
 )
 
 func main() {
@@ -47,23 +49,29 @@ func main() {
 
 	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, py32.TIM3)
 	sysCheck := syscheck.NewSysCheck(pinLed, writer)
+	frontPanel := panel.NewFrontPanel(pinFrontPanelLed)
 
 	commands := gcode.Commands{
-		"M106": func(args map[string]int) (string, error) {
-			lamp.SetPwm(args["S"])
-			return "", nil
-		},
 		"M800": func(args map[string]int) (string, error) {
-			state := args["S"] == 1
-			lamp.SetPower(state)
-			return "", nil
-		},
-		"M801": func(args map[string]int) (string, error) {
 			state := args["S"] == 1
 			lamp.SetFan(state)
 			return "", nil
 		},
-		"M900": func(args map[string]int) (string, error) {
+		"M801": func(args map[string]int) (string, error) {
+			state := args["S"] == 1
+			lamp.SetPower(state)
+			return "", nil
+		},
+		"M802": func(args map[string]int) (string, error) {
+			lamp.SetPwm(args["S"])
+			return "", nil
+		},
+		"M810": func(args map[string]int) (string, error) {
+			state := args["S"] == 1
+			frontPanel.SetLed(state)
+			return "", nil
+		},
+		"M820": func(args map[string]int) (string, error) {
 			intervalMs := args["S"]
 			if intervalMs <= 0 {
 				return "", errors.New("invalid interval")

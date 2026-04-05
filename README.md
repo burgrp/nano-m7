@@ -128,18 +128,16 @@ Custom MCU board based on PY32F030K1xTx bridging the Raspberry Pi / NanoDLP cont
 
 Communication between NanoDLP (Raspberry Pi) and MCU is via UART at 115200 baud (PA9/PA10).
 
-| Command | Parameters | GPIO | Description |
-|---------|-----------|------|-------------|
-| `G28 Z` | — | PA4, PA8, PB3 | Home Z axis to min endstop |
-| `G1` | `Z<mm> F<mm/min>` | PA8, PB3 | Move Z to absolute position |
-| `M105` | — | PF3 | Report NTC temperature |
-| `M106` | `S<0-255>` | PA7 | Set UV lamp PWM intensity |
-| `M107` | — | PA7, PB5 | UV lamp off (PWM=0, cut power) |
-| `M119` | — | PA4, PA5 | Report endstop and button states |
-| `M800` | `S<0/1>` | PB5 | UV lamp power enable (P-MOS) |
-| `M801` | `S<0/1>` | PB0 | Lamp fan enable (P-MOS) |
-| `M42` | `P0 S<0/1>` | PB4 | Front panel LED on/off |
-| `M900` | `S<ms>` | PB1 | Set onboard LED blink interval in ms (default 500) |
+| Command | Parameters | Description |
+|---------|------------|-------------|
+| `G1` | `Z<mm> F<mm/min>` | Move Z to absolute position |
+| `G28 Z` | — | Home Z axis to min endstop |
+| `M800` | `S<0/1>` | Lamp fan enable (P-MOS) |
+| `M801` | `S<0/1>` | UV lamp power enable (P-MOS) |
+| `M802` | `S<0-255>` | Set UV lamp PWM intensity |
+| `M810` | `P0 S<0/1>` | Front panel LED on/off |
+| `M820` | `S<ms>` | Set system check interval in ms (default 1000) |
+| `M114` | — | Report Z position (Z:n), endstop (ES:0/1), button (BTN:0/1), temperature (NTC:n) |
 
 > Note: Enable lamp power (`M800 S1`) before firing `M106`, and cut it after (`M800 S0`).
 
