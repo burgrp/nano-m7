@@ -4,6 +4,7 @@ import (
 	"device/py32"
 	"machine"
 	"runtime"
+	"strconv"
 	"time"
 )
 
@@ -16,7 +17,7 @@ const (
 	// pinLed    = machine.PA3
 )
 
-var blinkInterval = 500 * time.Millisecond
+var blinkInterval = 50 * time.Millisecond
 
 func main() {
 	setClockToHSE16MHz()
@@ -28,21 +29,27 @@ func main() {
 
 	println("Hello, Py32!")
 
-	go handleUART()
+	go healthCheck()
+	handleUART()
+}
 
+func healthCheck() {
 	for {
 		time.Sleep(blinkInterval)
 		pinLed.Set(!pinLed.Get())
 
-		// var m runtime.MemStats
-		// runtime.ReadMemStats(&m)
-		// print("; Alloc=")
-		// print(m.Alloc)
-		// print(" Sys=")
-		// print(m.Sys)
-		// print(" Mallocs=")
-		// println(m.Mallocs)
+		var m runtime.MemStats
+		runtime.ReadMemStats(&m)
+		print("; Alloc=")
+		print(strconv.Itoa(int(m.Alloc)))
+		print(" Sys=")
+		print(strconv.Itoa(int(m.Sys)))
+		print(" Mallocs=")
+		println(strconv.Itoa(int(m.Mallocs)))
+
+		//fmt.Println("; Alloc=", m.Alloc, " Sys=", m.Sys, " Mallocs=", m.Mallocs)
 	}
+
 }
 
 var (
