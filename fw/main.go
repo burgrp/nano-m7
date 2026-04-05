@@ -6,6 +6,10 @@ import (
 	"runtime"
 	"strconv"
 	"time"
+
+	"github.com/burgrp/nano-m7/fw/gcode"
+	"github.com/burgrp/nano-m7/fw/line"
+	"github.com/burgrp/nano-m7/fw/stdio"
 )
 
 const (
@@ -17,7 +21,7 @@ const (
 	// pinLed    = machine.PA3
 )
 
-var blinkInterval = 50 * time.Millisecond
+var healthCheckInterval = 1000 * time.Millisecond
 
 func main() {
 	setClockToHSE16MHz()
@@ -29,122 +33,26 @@ func main() {
 
 	println("Hello, Py32!")
 
-	go healthCheck()
-	handleUART()
+	writer := stdio.NewWriter()
+	reader := stdio.NewReader()
+
+	go healthCheck(writer)
+	err := gcode.Handle(reader, writer)
+	if err != nil {
+		panic("GCODE handler exited")
+	}
+
 }
 
-func healthCheck() {
+func healthCheck(writer line.Writer) {
 	for {
-		time.Sleep(blinkInterval)
+		time.Sleep(healthCheckInterval)
 		pinLed.Set(!pinLed.Get())
 
 		var m runtime.MemStats
 		runtime.ReadMemStats(&m)
-		print("; Alloc=")
-		print(strconv.Itoa(int(m.Alloc)))
-		print(" Sys=")
-		print(strconv.Itoa(int(m.Sys)))
-		print(" Mallocs=")
-		println(strconv.Itoa(int(m.Mallocs)))
-
-		//fmt.Println("; Alloc=", m.Alloc, " Sys=", m.Sys, " Mallocs=", m.Mallocs)
+		_ = writer.Write("; Alloc=" + strconv.Itoa(int(m.Alloc)) + " Sys=" + strconv.Itoa(int(m.Sys)) + " Mallocs=" + strconv.Itoa(int(m.Mallocs)))
 	}
-
-}
-
-var (
-	buf  [32]byte
-	bufN int
-)
-
-// handleUART drains the ring buffer filled by the UART ISR.
-// Called from the main loop — no goroutine or Gosched needed.
-func handleUART() {
-	for {
-		b, ok := machine.Serial.Buffer.Get()
-		if ok {
-			// print("uart: ")
-			//println(b)
-			//print(',')
-			machine.Serial.WriteByte('.')
-			machine.Serial.WriteByte(b)
-		}
-
-		runtime.Gosched()
-		//time.Sleep(10000 * time.Microsecond)
-	}
-	// if b == '\n' || b == '\r' {
-	// 	if bufN > 0 {
-	// 		processGcode(buf[:bufN])
-	// 		bufN = 0
-	// 	}
-	// } else if bufN < len(buf)-1 {
-	// 	buf[bufN] = b
-	// 	bufN++
-	// }
-
-	// for machine.Serial.Buffered() > 0 {
-	// 	b, _ := machine.Serial.ReadByte()
-	// 	print("uart: ")
-	// 	println(b)
-	// 	// if b == '\n' || b == '\r' {
-	// 	// 	if bufN > 0 {
-	// 	// 		processGcode(buf[:bufN])
-	// 	// 		bufN = 0
-	// 	// 	}
-	// 	// } else if bufN < len(buf)-1 {
-	// 	// 	buf[bufN] = b
-	// 	// 	bufN++
-	// 	// }
-	// }
-}
-
-// processGcode handles a single GCODE line (no trailing newline).
-func processGcode(line []byte) {
-	// M900 S<ms> — set LED blink interval
-	if hasPrefix(line, "M900") {
-		ms := parseParam(line, 'S')
-		if ms > 0 {
-			blinkInterval = time.Duration(ms) * time.Millisecond
-			println("ok")
-			return
-		}
-		println("error")
-		return
-	}
-	println("ok")
-}
-
-// hasPrefix checks if b starts with the ASCII prefix p.
-func hasPrefix(b []byte, p string) bool {
-	if len(b) < len(p) {
-		return false
-	}
-	for i := 0; i < len(p); i++ {
-		if b[i] != p[i] {
-			return false
-		}
-	}
-	return true
-}
-
-// parseParam finds parameter letter (e.g. 'S') and parses its integer value.
-// Returns 0 if not found or invalid.
-func parseParam(line []byte, param byte) int32 {
-	for i := 0; i < len(line); i++ {
-		if line[i] == param && i+1 < len(line) {
-			var v int32
-			for j := i + 1; j < len(line); j++ {
-				c := line[j]
-				if c < '0' || c > '9' {
-					break
-				}
-				v = v*10 + int32(c-'0')
-			}
-			return v
-		}
-	}
-	return 0
 }
 
 func setClockToHSE16MHz() {
