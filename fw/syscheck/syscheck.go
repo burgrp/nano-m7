@@ -19,6 +19,8 @@ func NewSysCheck(pinLed machine.Pin, writer line.Writer) *SysCheck {
 		interval: 1000 * time.Millisecond,
 	}
 
+	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
+
 	go func() {
 		for {
 			time.Sleep(s.interval)

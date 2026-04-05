@@ -40,8 +40,6 @@ func main() {
 	// Enable TIM3 peripheral clock
 	py32.RCC.APBENR1.SetBits(py32.RCC_APBENR1_TIM3EN)
 
-	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
-
 	writer := stdio.NewWriter()
 	reader := stdio.NewReader()
 
