@@ -23,18 +23,22 @@ const (
 	// pinLampPwmAf = 1
 	pinUartRx    = machine.PA8
 	pinUartTx    = machine.PA7
-	pinLampPwm   = machine.PA2
-	pinLampPwmAf = 13
 	pinLed       = machine.PA3
 	pinLampFan   = machine.PA4
 	pinLampPower = machine.PB3
+	pinLampPwm   = machine.PA2
+	pinLampPwmAf = 13
 )
 
 func main() {
 	//setClockToHSE16MHz()
+
 	machine.ConfigureUARTPin(pinUartRx, 8)
 	machine.ConfigureUARTPin(pinUartTx, 8)
 	machine.DefaultUART.Configure(machine.UARTConfig{})
+
+	// Enable TIM3 peripheral clock
+	py32.RCC.APBENR1.SetBits(py32.RCC_APBENR1_TIM3EN)
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
@@ -43,7 +47,7 @@ func main() {
 
 	writer.Write("; NANO-M7")
 
-	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf)
+	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, py32.TIM3)
 	sysCheck := syscheck.NewSysCheck(pinLed, writer)
 
 	commands := gcode.Commands{

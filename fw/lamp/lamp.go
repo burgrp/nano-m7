@@ -9,15 +9,17 @@ type Lamp struct {
 	pwmPeriod uint32
 	pinFan    machine.Pin
 	pinPower  machine.Pin
+	timer     *py32.TIM_Type
 }
 
 const lampPwmTargetHz = 1000
 
-func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8) *Lamp {
+func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8, timer *py32.TIM_Type) *Lamp {
 
 	lamp := &Lamp{
 		pinFan:   pinFan,
 		pinPower: pinPower,
+		timer:    timer,
 	}
 
 	pinFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
@@ -35,27 +37,24 @@ func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8) *Lamp {
 	pinPwm.Configure(machine.PinConfig{Mode: machine.PinAlternate})
 	pinPwm.SetAltFunc(pinPwmAf)
 
-	// Enable TIM3 peripheral clock
-	py32.RCC.APBENR1.SetBits(py32.RCC_APBENR1_TIM3EN)
-
 	// Set prescaler and period
-	py32.TIM3.PSC.Set(psc)
-	py32.TIM3.ARR.Set(arr)
-	py32.TIM3.CCR1.Set(0)
+	timer.PSC.Set(psc)
+	timer.ARR.Set(arr)
+	timer.CCR1.Set(0)
 
 	// PWM mode 1 on CH1, enable output compare preload
-	py32.TIM3.SetCCMR1_Output_OC1M(py32.TIM_CCMR1_Output_OC1M_PwmMode1)
-	py32.TIM3.CCMR1_Output.SetBits(py32.TIM_CCMR1_Output_OC1PE)
+	timer.SetCCMR1_Output_OC1M(py32.TIM_CCMR1_Output_OC1M_PwmMode1)
+	timer.CCMR1_Output.SetBits(py32.TIM_CCMR1_Output_OC1PE)
 
 	// Enable CH1 output (active high)
-	py32.TIM3.CCER.SetBits(py32.TIM_CCER_CC1E)
+	timer.CCER.SetBits(py32.TIM_CCER_CC1E)
 
 	// Enable auto-reload preload and generate update to load shadow registers
-	py32.TIM3.CR1.SetBits(py32.TIM_CR1_ARPE)
-	py32.TIM3.SetEGR_UG(1)
+	timer.CR1.SetBits(py32.TIM_CR1_ARPE)
+	timer.SetEGR_UG(1)
 
 	// Start the counter
-	py32.TIM3.CR1.SetBits(py32.TIM_CR1_CEN)
+	timer.CR1.SetBits(py32.TIM_CR1_CEN)
 
 	return lamp
 }
@@ -64,11 +63,11 @@ func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8) *Lamp {
 func (l *Lamp) SetPwm(s int) {
 	switch {
 	case s <= 0:
-		py32.TIM3.CCR1.Set(0)
+		l.timer.CCR1.Set(0)
 	case s >= 255:
-		py32.TIM3.CCR1.Set(l.pwmPeriod + 1)
+		l.timer.CCR1.Set(l.pwmPeriod + 1)
 	default:
-		py32.TIM3.CCR1.Set(uint32(s) * (l.pwmPeriod + 1) / 255)
+		l.timer.CCR1.Set(uint32(s) * (l.pwmPeriod + 1) / 255)
 	}
 }
 
