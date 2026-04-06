@@ -30,6 +30,10 @@ const (
 	pinZEndStop      = machine.PA4
 	pinLampNtc       = machine.PA0
 	pinLampNtcAdcCh  = 0
+	pinZMotorStep    = machine.PA8
+	pinZMotorStepAf  = 2 // PA8 AF2 = TIM1_CH1
+	pinZMotorDir     = machine.PB4
+	zStepsPerMm      = 1600 // 200 steps/rev × 1/16 microstepping ÷ 2 mm/rev leadscrew
 
 	// Embedfire
 	// pinUartRx        = machine.PA8
@@ -53,7 +57,8 @@ func main() {
 	machine.ConfigureUARTPin(pinUartTx, 8)
 	machine.DefaultUART.Configure(machine.UARTConfig{})
 
-	// Enable TIM3 peripheral clock
+	// Enable TIM1 and TIM3 peripheral clocks
+	py32.RCC.APBENR2.SetBits(py32.RCC_APBENR2_TIM1EN)
 	py32.RCC.APBENR1.SetBits(py32.RCC_APBENR1_TIM3EN)
 
 	writer := stdio.NewWriter()
@@ -64,7 +69,7 @@ func main() {
 	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, pinLampNtc, pinLampNtcAdcCh, py32.TIM3)
 	sysCheck := syscheck.NewSysCheck(pinLed, writer)
 	frontPanel := panel.NewFrontPanel(pinFrontPanelLed, pinFrontPanelBtn)
-	zAxis := zaxis.NewZAxis(pinZEndStop)
+	zAxis := zaxis.NewZAxis(pinZMotorStep, pinZMotorDir, pinZEndStop, pinZMotorStepAf, py32.TIM1, zStepsPerMm)
 
 	reporter := report.NewReporter(frontPanel, lamp, zAxis)
 

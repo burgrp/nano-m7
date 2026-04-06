@@ -18,7 +18,7 @@ func NewFrontPanel(pinLed, pinButton machine.Pin) *FrontPanel {
 	}
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
-	pinButton.Configure(machine.PinConfig{Mode: machine.PinInput})
+	pinButton.Configure(machine.PinConfig{Mode: machine.PinInputPulldown})
 
 	return p
 }
