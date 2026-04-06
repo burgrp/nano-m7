@@ -5,6 +5,7 @@ import (
 	"errors"
 	"machine"
 	"runtime"
+	"runtime/interrupt"
 	"time"
 
 	"github.com/burgrp/nano-m7/fw/gcode"
@@ -15,6 +16,8 @@ import (
 	"github.com/burgrp/nano-m7/fw/syscheck"
 	"github.com/burgrp/nano-m7/fw/zaxis"
 )
+
+var zAxis *zaxis.ZAxis
 
 const (
 	// Nano-M7
@@ -33,8 +36,6 @@ const (
 	pinZMotorStep    = machine.PA8
 	pinZMotorStepAf  = 2 // PA8 AF2 = TIM1_CH1
 	pinZMotorDir     = machine.PB4
-	zStepsPerMm      = 1600 // 200 steps/rev × 1/16 microstepping ÷ 2 mm/rev leadscrew
-
 	// Embedfire
 	// pinUartRx        = machine.PA8
 	// pinUartTx        = machine.PA7
@@ -69,23 +70,30 @@ func main() {
 	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, pinLampNtc, pinLampNtcAdcCh, py32.TIM3)
 	sysCheck := syscheck.NewSysCheck(pinLed, writer)
 	frontPanel := panel.NewFrontPanel(pinFrontPanelLed, pinFrontPanelBtn)
-	zAxis := zaxis.NewZAxis(pinZMotorStep, pinZMotorDir, pinZEndStop, pinZMotorStepAf, py32.TIM1, zStepsPerMm)
+	zAxis = zaxis.NewZAxis(pinZMotorStep, pinZMotorDir, pinZEndStop, pinZMotorStepAf, py32.TIM1)
+
+	irq := interrupt.New(py32.IRQ_TIM1_BRK_UP_TRG_COM, func(interrupt.Interrupt) {
+		if zAxis != nil {
+			zAxis.HandleISR()
+		}
+	})
+	irq.SetPriority(0x40)
+	irq.Enable()
 
 	reporter := report.NewReporter(frontPanel, lamp, zAxis)
 
 	commands := gcode.Commands{
-		"G1": func(args map[string]int) (string, error) {
-			if z, ok := args["Z"]; ok {
-				f := args["F"]
-				if f <= 0 {
-					return "", errors.New("invalid feedrate")
-				}
-				zAxis.MoveTo(z, f)
-			}
+		"M700": func(args map[string]int) (string, error) {
+			zAxis.Home()
 			return "", nil
 		},
-		"G28": func(args map[string]int) (string, error) {
-			zAxis.MoveHome()
+		"M701": func(args map[string]int) (string, error) {
+			steps := args["S"]
+			freq := args["F"]
+			if freq <= 0 {
+				return "", errors.New("F (step frequency in Hz) required")
+			}
+			zAxis.Move(steps, freq)
 			return "", nil
 		},
 		"M114": func(args map[string]int) (string, error) {

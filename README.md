@@ -123,14 +123,14 @@ Communication between NanoDLP (Raspberry Pi) and MCU is via UART at 115200 baud 
 
 | Command | Parameters | Description |
 |---------|------------|-------------|
-| `G1` | `Z<mm> F<mm/min>` | Move Z to absolute position |
-| `G28` | — | Home Z axis to min endstop |
+| `M700` | — | Home Z axis to min endstop |
+| `M701` | `S<steps> F<Hz>` | Move Z relative by steps at step frequency F |
 | `M800` | `S<0/1>` | Lamp fan enable (P-MOS) |
 | `M801` | `S<0/1>` | UV lamp power enable (P-MOS) |
 | `M802` | `S<0-255>` | Set UV lamp PWM intensity |
 | `M810` | `P0 S<0/1>` | Front panel LED on/off |
 | `M820` | `S<ms>` | Set system check interval in ms (default 1000) |
-| `M114` | — | Report Z position (Z:n), endstop (ES:0/1), button (BTN:0/1), temperature (NTC:n) |
+| `M114` | — | Report Z position (Z:n steps), endstop (ES:0/1), button (BTN:0/1), temperature (NTC:n°C) |
 
 ## Verified
 

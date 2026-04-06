@@ -13,7 +13,7 @@ type LampReporter interface {
 }
 
 type ZAxisReporter interface {
-	GetZPositionMm() int
+	GetPositionSteps() int
 	GetEndStop() bool
 }
 
@@ -32,12 +32,12 @@ func NewReporter(frontPanelReporter FrontPanelReporter, lampReporter LampReporte
 }
 
 func (r *Reporter) Report() (string, error) {
-	zPositionMm := r.zAxisReporter.GetZPositionMm()
+	zPositionSteps := r.zAxisReporter.GetPositionSteps()
 	zEndStop := r.zAxisReporter.GetEndStop()
 	fpButton := r.frontPanelReporter.GetFrontPanelButton()
 	lampTempC := r.lampReporter.GetLampTempC()
 
-	return "Z:" + strconv.Itoa(zPositionMm) + " ES:" + strconv.Itoa(boolToInt(zEndStop)) + " BTN:" + strconv.Itoa(boolToInt(fpButton)) + " NTC:" + strconv.Itoa(lampTempC), nil
+	return "Z:" + strconv.Itoa(zPositionSteps) + " ES:" + strconv.Itoa(boolToInt(zEndStop)) + " BTN:" + strconv.Itoa(boolToInt(fpButton)) + " NTC:" + strconv.Itoa(lampTempC), nil
 }
 
 func boolToInt(b bool) int {

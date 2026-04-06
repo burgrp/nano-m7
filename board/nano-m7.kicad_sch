@@ -3671,7 +3671,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "upravy:\n- nový zdroj 5V\n- 3V3 stačí LDO (LM1117)\n- dořešit Z-STOP - optický 5V + signál active low\n"
+	(text "upravy:\n- nový zdroj 5V\n- 3V3 stačí LDO (LM1117)\n- třípinový konektor na Z-STOP - optický 5V + signál active low\n- nEN pro stepper driver\n\n"
 		(exclude_from_sim no)
 		(at 106.172 97.028 0)
 		(effects
