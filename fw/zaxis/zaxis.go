@@ -3,18 +3,20 @@ package zaxis
 import (
 	"device/py32"
 	"machine"
+	"runtime"
 	"runtime/volatile"
 )
 
-const defaultHomingHz = 400 // step frequency for homing
+const defaultHomingHz = 1000
 
 type ZAxis struct {
 	pinDir        machine.Pin
 	pinEndStop    machine.Pin
 	pinStep       machine.Pin
 	timer         *py32.TIM_Type
-	positionSteps int
+	positionSteps volatile.Register32
 	stepsLeft     volatile.Register32
+	direction     bool
 }
 
 func NewZAxis(
@@ -65,10 +67,24 @@ func NewZAxis(
 func (z *ZAxis) HandleISR() {
 	z.timer.SR.ClearBits(py32.TIM_SR_UIF)
 
+	if !z.pinEndStop.Get() && !z.direction {
+		// Endstop triggered: stop immediately and zero position
+		z.timer.CR1.ClearBits(py32.TIM_CR1_CEN)
+		z.positionSteps.Set(0)
+		return
+	}
+
 	if z.stepsLeft.Get() == 0 {
 		z.timer.CR1.ClearBits(py32.TIM_CR1_CEN)
 		return
 	}
+
+	if z.direction {
+		z.positionSteps.Set(z.positionSteps.Get() + 1)
+	} else {
+		z.positionSteps.Set(z.positionSteps.Get() - 1)
+	}
+
 	z.stepsLeft.Set(z.stepsLeft.Get() - 1)
 }
 
@@ -94,9 +110,12 @@ func (z *ZAxis) Move(steps int, stepHz int) {
 		stepHz = defaultHomingHz
 	}
 
-	z.pinDir.Set(steps > 0)
+	z.pinDir.Set(steps < 0)
 	if steps < 0 {
 		steps = -steps
+		z.direction = false
+	} else {
+		z.direction = true
 	}
 
 	z.setStepFrequency(uint32(stepHz))
@@ -110,21 +129,19 @@ func (z *ZAxis) Move(steps int, stepHz int) {
 
 	// Blocking wait
 	for z.timer.CR1.HasBits(py32.TIM_CR1_CEN) {
+		runtime.Gosched()
 	}
 
-	z.positionSteps += steps
 }
 
 // Home drives toward the endstop then zeroes the position (blocking).
 func (z *ZAxis) Home() {
-	for !z.GetEndStop() {
-		z.Move(-100, defaultHomingHz)
-	}
-	z.positionSteps = 0
+	const MinInt = ^int(^uint(0) >> 1)
+	z.Move(MinInt, defaultHomingHz)
 }
 
 func (z *ZAxis) GetPositionSteps() int {
-	return z.positionSteps
+	return int(z.positionSteps.Get())
 }
 
 func (z *ZAxis) GetEndStop() bool {
