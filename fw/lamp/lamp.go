@@ -3,6 +3,7 @@ package lamp
 import (
 	"device/py32"
 	"machine"
+	"math"
 )
 
 type Lamp struct {
@@ -14,7 +15,16 @@ type Lamp struct {
 
 const lampPwmTargetHz = 1000
 
-func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8, timer *py32.TIM_Type) *Lamp {
+// NTC thermistor: 100k B3950, low side of divider, upper resistor 47k.
+const (
+	ntcR0     = 100_000.0 // resistance at reference temperature (Ω)
+	ntcT0     = 298.15    // reference temperature (K = 25°C)
+	ntcB      = 3950.0    // B-parameter (K)
+	ntcRUpper = 47_000.0  // upper divider resistor (Ω)
+	ntcADCMax = 4095.0    // 12-bit ADC full scale
+)
+
+func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8, pinNTC machine.Pin, ntcAdcCh uint8, timer *py32.TIM_Type) *Lamp {
 
 	lamp := &Lamp{
 		pinFan:   pinFan,
@@ -22,8 +32,12 @@ func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8, timer *py32.T
 		timer:    timer,
 	}
 
+	// -- GPIO setup --
+
 	pinFan.Configure(machine.PinConfig{Mode: machine.PinOutput})
 	pinPower.Configure(machine.PinConfig{Mode: machine.PinOutput})
+
+	// -- Timer setup --
 
 	// Compute prescaler and period to hit lampPwmTargetHz.
 	// timer_freq = CPU / (PSC+1), PWM_freq = timer_freq / (ARR+1)
@@ -56,10 +70,33 @@ func NewLamp(pinFan, pinPower, pinPwm machine.Pin, pinPwmAf uint8, timer *py32.T
 	// Start the counter
 	timer.CR1.SetBits(py32.TIM_CR1_CEN)
 
+	// -- ADC setup --
+
+	// Configure PA0 as analog input (no pull)
+	pinNTC.Configure(machine.PinConfig{Mode: machine.PinInputAnalog})
+
+	// Enable ADC peripheral clock
+	py32.RCC.APBENR2.SetBits(py32.RCC_APBENR2_ADCEN)
+
+	// Clock: PCLK/2 — keeps ADC clock ≤ 16 MHz at 16/24 MHz CPU
+	py32.ADC.CFGR2.Set(py32.ADC_CFGR2_CKMODE_PCLK_Div2)
+
+	// Calibrate ADC (must be done before enabling)
+	py32.ADC.CR.SetBits(py32.ADC_CR_ADCAL)
+	for py32.ADC.CR.HasBits(py32.ADC_CR_ADCAL) {
+	}
+
+	// 12-bit resolution (default), single conversion mode (CONT=0, default)
+	// Longest sample time — NTC + 47k upper resistor is high impedance
+	py32.ADC.SMPR.Set(py32.ADC_SMPR_SMP_Cycles239_5)
+
+	// Select ADC channel
+	py32.ADC.CHSELR.Set(1 << ntcAdcCh)
+
 	return lamp
 }
 
-// setLampPwm sets the lamp brightness. s is in the range 0–255 (Marlin M106 convention).
+// SetPwm sets the lamp brightness. s is in the range 0–255 (Marlin M106 convention).
 func (l *Lamp) SetPwm(s int) {
 	switch {
 	case s <= 0:
@@ -72,13 +109,45 @@ func (l *Lamp) SetPwm(s int) {
 }
 
 func (l *Lamp) SetFan(on bool) {
-	l.pinPower.Set(on)
-}
-
-func (l *Lamp) SetPower(on bool) {
+	if !on {
+		l.SetPower(false)
+	}
 	l.pinFan.Set(on)
 }
 
+func (l *Lamp) SetPower(on bool) {
+	if on {
+		l.SetFan(true)
+	}
+	l.SetPwm(0)
+	l.pinPower.Set(on)
+}
+
+// GetLampTempC reads the NTC thermistor and returns temperature in °C.
+// NTC type: 100k B3950, low side of voltage divider, upper resistor 47k.
 func (l *Lamp) GetLampTempC() int {
-	return 22
+	// ADEN is cleared by hardware after each conversion sequence (auto power-down).
+	// Re-enable per the documented procedure: write 1 to ISR bit 0 to clear ADRDY
+	// (ADC_ISR_ADRDY = bit 0; absent from the register bit table but referenced in
+	// the enable procedure — confirmed SVD discrepancy, no wait loop possible),
+	// then set ADEN. No ADRDY wait: the bit does not exist in ADC_ISR on PY32F030.
+	py32.ADC.ISR.Set(py32.ADC_ISR_ADRDY) // RC_W1: write 1 clears bit 0, others unaffected
+	py32.ADC.CR.SetBits(py32.ADC_CR_ADEN)
+
+	// Start conversion and wait for EOC
+	py32.ADC.CR.SetBits(py32.ADC_CR_ADSTART)
+	for !py32.ADC.ISR.HasBits(py32.ADC_ISR_EOC) {
+	}
+	raw := float64(py32.ADC.DR.Get()) // reading DR clears EOC
+
+	// Voltage divider: ADC = VREF * R_ntc / (R_upper + R_ntc)
+	// → R_ntc = R_upper * raw / (ADCmax - raw)
+	rNtc := ntcRUpper * raw / (ntcADCMax - raw)
+
+	// Steinhart-Hart B-parameter equation:
+	// 1/T = 1/T0 + (1/B) * ln(R/R0)
+	invT := 1.0/ntcT0 + math.Log(rNtc/ntcR0)/ntcB
+	tempC := 1.0/invT - 273.15
+
+	return int(tempC)
 }

@@ -9,7 +9,7 @@ type ZAxis struct {
 
 func NewZAxis(pinEndStop machine.Pin) *ZAxis {
 
-	pinEndStop.Configure(machine.PinConfig{Mode: machine.PinInput})
+	pinEndStop.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
 
 	return &ZAxis{
 		pinEndStop: pinEndStop,
@@ -29,5 +29,5 @@ func (z *ZAxis) GetZPositionMm() int {
 }
 
 func (z *ZAxis) GetEndStop() bool {
-	return z.pinEndStop.Get()
+	return !z.pinEndStop.Get()
 }

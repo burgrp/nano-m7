@@ -17,27 +17,37 @@ import (
 )
 
 const (
-	// pinUartRx  = machine.PA9
-	// pinUartTx  = machine.PA10
-	// pinLed     = machine.PB1
-	// pinLampFan = machine.PA7
-	// pinLampPower = machine.PB3
-	// pinLampPwm   = machine.PA6
-	// pinLampPwmAf = 1
-	pinUartRx        = machine.PA8
-	pinUartTx        = machine.PA7
-	pinLed           = machine.PA3
-	pinLampFan       = machine.PB3
-	pinLampPower     = machine.PB4
-	pinLampPwm       = machine.PA2
-	pinLampPwmAf     = 13
-	pinFrontPanelLed = machine.PA4
+	// Nano-M7
+	pinUartRx        = machine.PA9
+	pinUartTx        = machine.PA10
+	pinLed           = machine.PB1
+	pinLampFan       = machine.PA7
+	pinLampPower     = machine.PB3
+	pinLampPwm       = machine.PA6
+	pinLampPwmAf     = 1
+	pinFrontPanelLed = machine.PB5
 	pinFrontPanelBtn = machine.PA5
-	pinZEndStop      = machine.PA6
+	pinZEndStop      = machine.PA4
+	pinLampNtc       = machine.PA0
+	pinLampNtcAdcCh  = 0
+
+	// Embedfire
+	// pinUartRx        = machine.PA8
+	// pinUartTx        = machine.PA7
+	// pinLed           = machine.PA3
+	// pinLampFan       = machine.PB3
+	// pinLampPower     = machine.PB4
+	// pinLampPwm       = machine.PA2
+	// pinLampPwmAf     = 13
+	// pinFrontPanelLed = machine.PA4
+	// pinFrontPanelBtn = machine.PA5
+	// pinZEndStop      = machine.PA6
+	// pinLampNtc       = machine.PA0
+	// pinLampNtcAdcCh  = 0
 )
 
 func main() {
-	//setClockToHSE16MHz()
+	setClockToHSE16MHz()
 
 	machine.ConfigureUARTPin(pinUartRx, 8)
 	machine.ConfigureUARTPin(pinUartTx, 8)
@@ -51,7 +61,7 @@ func main() {
 
 	writer.Write("; NANO-M7")
 
-	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, py32.TIM3)
+	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, pinLampNtc, pinLampNtcAdcCh, py32.TIM3)
 	sysCheck := syscheck.NewSysCheck(pinLed, writer)
 	frontPanel := panel.NewFrontPanel(pinFrontPanelLed, pinFrontPanelBtn)
 	zAxis := zaxis.NewZAxis(pinZEndStop)
