@@ -929,7 +929,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 131.318 71.12 90)
 			(effects
 				(font
@@ -1000,7 +1000,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 133.35 49.022 90)
 			(effects
 				(font
@@ -1056,7 +1056,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5a411d95-67cf-4c0e-b1a1-3cef84fdc0c4")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR033"
 			(at 140.97 83.82 0)
 			(effects
 				(font
@@ -1104,13 +1104,13 @@
 			(uuid "2d90c770-7160-4d74-a5d4-0f2f08aa65fc")
 		)
 		(instances
-			(project ""
+			(project "nano-m7"
 				(path "/657b92bb-29fd-4612-8c57-4a7da3c6d68f/a0ec00c8-1016-421a-a89c-2f1904f8a9f7"
-					(reference "#PWR029")
+					(reference "#PWR033")
 					(unit 1)
 				)
 				(path "/657b92bb-29fd-4612-8c57-4a7da3c6d68f/f2ca9a7d-fea9-4a68-835b-845e026c6569"
-					(reference "#PWR031")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -1184,7 +1184,7 @@
 			(uuid "cb1d258f-6e8d-4889-9c1f-b66702799b47")
 		)
 		(instances
-			(project ""
+			(project "nano-m7"
 				(path "/657b92bb-29fd-4612-8c57-4a7da3c6d68f/a0ec00c8-1016-421a-a89c-2f1904f8a9f7"
 					(reference "Q1")
 					(unit 1)
@@ -1221,7 +1221,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 121.92 64.262 90)
 			(effects
 				(font
@@ -1330,7 +1330,7 @@
 			(uuid "7c93db3f-2b93-48dc-896d-ac2b79ad0cdd")
 		)
 		(instances
-			(project ""
+			(project "nano-m7"
 				(path "/657b92bb-29fd-4612-8c57-4a7da3c6d68f/a0ec00c8-1016-421a-a89c-2f1904f8a9f7"
 					(reference "Q2")
 					(unit 1)
@@ -1367,7 +1367,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 142.748 57.15 90)
 			(effects
 				(font
@@ -1423,7 +1423,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d11eb0b7-9451-402e-b6d2-099821e11273")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR032"
 			(at 129.54 83.82 0)
 			(effects
 				(font
@@ -1473,11 +1473,11 @@
 		(instances
 			(project "nano-m7"
 				(path "/657b92bb-29fd-4612-8c57-4a7da3c6d68f/a0ec00c8-1016-421a-a89c-2f1904f8a9f7"
-					(reference "#PWR028")
+					(reference "#PWR032")
 					(unit 1)
 				)
 				(path "/657b92bb-29fd-4612-8c57-4a7da3c6d68f/f2ca9a7d-fea9-4a68-835b-845e026c6569"
-					(reference "#PWR030")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
