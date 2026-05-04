@@ -54,8 +54,11 @@ const (
 func main() {
 	setClockToHSE16MHz()
 
-	machine.ConfigureUARTPin(pinUartRx, 8)
-	machine.ConfigureUARTPin(pinUartTx, 8)
+	pinUartRx.Configure(machine.PinConfig{Mode: machine.PinAlternate})
+	pinUartRx.SetAltFunc(8)
+	pinUartTx.Configure(machine.PinConfig{Mode: machine.PinAlternate})
+	pinUartTx.SetAltFunc(8)
+
 	machine.DefaultUART.Configure(machine.UARTConfig{})
 
 	// Enable TIM1 and TIM3 peripheral clocks
