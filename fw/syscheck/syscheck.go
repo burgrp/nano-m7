@@ -2,8 +2,6 @@ package syscheck
 
 import (
 	"machine"
-	"runtime"
-	"strconv"
 	"time"
 
 	"github.com/burgrp/nano-m7/fw/line"
@@ -21,16 +19,16 @@ func NewSysCheck(pinLed machine.Pin, writer line.Writer) *SysCheck {
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
-	go func() {
-		for {
-			time.Sleep(s.interval)
-			pinLed.Set(!pinLed.Get())
+	// go func() {
+	// 	for {
+	// 		time.Sleep(s.interval)
+	// 		pinLed.Set(!pinLed.Get())
 
-			var m runtime.MemStats
-			runtime.ReadMemStats(&m)
-			_ = writer.Write("; Alloc=" + strconv.Itoa(int(m.Alloc)) + " Sys=" + strconv.Itoa(int(m.Sys)) + " Mallocs=" + strconv.Itoa(int(m.Mallocs)))
-		}
-	}()
+	// 		var m runtime.MemStats
+	// 		runtime.ReadMemStats(&m)
+	// 		_ = writer.Write("; Alloc=" + strconv.Itoa(int(m.Alloc)) + " Sys=" + strconv.Itoa(int(m.Sys)) + " Mallocs=" + strconv.Itoa(int(m.Mallocs)))
+	// 	}
+	// }()
 
 	return s
 }

@@ -36,6 +36,7 @@ const (
 	pinZMotorStep    = machine.PA8
 	pinZMotorStepAf  = 2 // PA8 AF2 = TIM1_CH1
 	pinZMotorDir     = machine.PB4
+	pinZMotorEn      = machine.PA11 // active low
 	// Embedfire
 	// pinUartRx        = machine.PA8
 	// pinUartTx        = machine.PA7
@@ -73,7 +74,7 @@ func main() {
 	lamp := lamp.NewLamp(pinLampFan, pinLampPower, pinLampPwm, pinLampPwmAf, pinLampNtc, pinLampNtcAdcCh, py32.TIM3)
 	sysCheck := syscheck.NewSysCheck(pinLed, writer)
 	frontPanel := panel.NewFrontPanel(pinFrontPanelLed, pinFrontPanelBtn)
-	zAxis = zaxis.NewZAxis(pinZMotorStep, pinZMotorDir, pinZEndStop, pinZMotorStepAf, py32.TIM1)
+	zAxis = zaxis.NewZAxis(pinZMotorStep, pinZMotorDir, pinZEndStop, pinZMotorEn, pinZMotorStepAf, py32.TIM1)
 
 	irq := interrupt.New(py32.IRQ_TIM1_BRK_UP_TRG_COM, func(interrupt.Interrupt) {
 		if zAxis != nil {

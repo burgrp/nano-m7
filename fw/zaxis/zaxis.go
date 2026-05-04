@@ -13,6 +13,7 @@ type ZAxis struct {
 	pinDir        machine.Pin
 	pinEndStop    machine.Pin
 	pinStep       machine.Pin
+	pinEn         machine.Pin
 	timer         *py32.TIM_Type
 	positionSteps volatile.Register32
 	stepsLeft     volatile.Register32
@@ -20,7 +21,7 @@ type ZAxis struct {
 }
 
 func NewZAxis(
-	pinStep, pinDir, pinEndStop machine.Pin,
+	pinStep, pinDir, pinEndStop, pinEn machine.Pin,
 	pinStepAf uint8,
 	timer *py32.TIM_Type,
 ) *ZAxis {
@@ -29,12 +30,15 @@ func NewZAxis(
 		pinDir:     pinDir,
 		pinEndStop: pinEndStop,
 		pinStep:    pinStep,
+		pinEn:      pinEn,
 		timer:      timer,
 	}
 
 	// -- GPIO --
 	pinDir.Configure(machine.PinConfig{Mode: machine.PinOutput})
 	pinEndStop.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
+	pinEn.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	pinEn.High() // active low: high = disabled
 
 	// -- Timer --
 
@@ -67,7 +71,7 @@ func NewZAxis(
 func (z *ZAxis) HandleISR() {
 	z.timer.SR.ClearBits(py32.TIM_SR_UIF)
 
-	if !z.pinEndStop.Get() && !z.direction {
+	if z.isEndStop() && !z.direction {
 		// Endstop triggered: stop immediately and zero position
 		z.timer.CR1.ClearBits(py32.TIM_CR1_CEN)
 		z.positionSteps.Set(0)
@@ -103,6 +107,11 @@ func (z *ZAxis) setStepFrequency(stepHz uint32) {
 // Move executes a relative blocking move of steps at stepHz.
 // steps > 0 → positive direction, steps < 0 → negative.
 func (z *ZAxis) Move(steps int, stepHz int) {
+
+	if z.isEndStop() && steps < 0 {
+		return
+	}
+
 	if steps == 0 {
 		return
 	}
@@ -120,6 +129,7 @@ func (z *ZAxis) Move(steps int, stepHz int) {
 
 	z.setStepFrequency(uint32(stepHz))
 
+	z.pinEn.Low() // active low: enable driver
 	z.pinStep.Configure(machine.PinConfig{Mode: machine.PinAlternate})
 
 	// stepsLeft counts down from steps to 0; ISR stops timer when it hits 0.
@@ -131,6 +141,9 @@ func (z *ZAxis) Move(steps int, stepHz int) {
 	for z.timer.CR1.HasBits(py32.TIM_CR1_CEN) {
 		runtime.Gosched()
 	}
+
+	z.pinStep.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	z.pinEn.High() // disable driver when idle
 
 }
 
@@ -145,5 +158,9 @@ func (z *ZAxis) GetPositionSteps() int {
 }
 
 func (z *ZAxis) GetEndStop() bool {
+	return z.isEndStop()
+}
+
+func (z *ZAxis) isEndStop() bool {
 	return !z.pinEndStop.Get() // active low: NPN sensor pulls to GND when triggered
 }
