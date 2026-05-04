@@ -4522,9 +4522,9 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "upravy:\n- třípinový konektor na Z-STOP - optický 5V + signál active low"
+	(text "next version 1.2:\n- hw pull-up for ZS_EN to cancel stepper noise on MCU flashing"
 		(exclude_from_sim no)
-		(at 106.172 97.028 0)
+		(at 183.388 173.228 0)
 		(effects
 			(font
 				(size 1.27 1.27)
