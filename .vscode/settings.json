@@ -1,5 +1,5 @@
 {
-    "go.toolsEnvVars": {
+    "go.toolsEnvVarsX": {
         "GOOS": "linux",
         "GOARCH": "arm",
         "GOROOT": "/home/paul/.cache/tinygo/goroot-c609279799bffac74246b28f076fdab701e57129b4d2d483ade66c46e80e6ecd",
