@@ -2,3 +2,4 @@ production
 bom
 *-backups
 ~*
+_autosave*
