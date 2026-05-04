@@ -14,7 +14,7 @@ type SysCheck struct {
 func NewSysCheck(pinLed machine.Pin, writer line.Writer) *SysCheck {
 
 	s := &SysCheck{
-		interval: 1000 * time.Millisecond,
+		interval: 10000 * time.Millisecond,
 	}
 
 	pinLed.Configure(machine.PinConfig{Mode: machine.PinOutput})

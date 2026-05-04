@@ -89,17 +89,14 @@ func parseLine(s string) (string, map[string]int, error) {
 	return cmd, args, nil
 }
 
-// isValidCommand checks that the token starts with one or more letters followed by one or more digits.
+// isValidCommand checks that the token contains only uppercase letters and digits, starting with a letter.
 func isValidCommand(s string) bool {
-	i := 0
-	for i < len(s) && s[i] >= 'A' && s[i] <= 'Z' {
-		i++
-	}
-	if i == 0 || i == len(s) {
+	if len(s) == 0 || s[0] < 'A' || s[0] > 'Z' {
 		return false
 	}
-	for ; i < len(s); i++ {
-		if s[i] < '0' || s[i] > '9' {
+	for i := 1; i < len(s); i++ {
+		c := s[i]
+		if (c < 'A' || c > 'Z') && (c < '0' || c > '9') {
 			return false
 		}
 	}

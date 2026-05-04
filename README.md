@@ -117,20 +117,25 @@ Custom MCU board based on PY32F030K1xTx bridging the Raspberry Pi / NanoDLP cont
 | PB4 | ZS_DIR | OUT | Z stepper DIR |
 | PB5 | FP_LED | OUT | Front panel LED |
 
-### GCODE Interface
+### Command Interface
 
 Communication between NanoDLP (Raspberry Pi) and MCU is via UART at 115200 baud (PA9/PA10).
 
+Custom non-standard command set (not GCODE-compatible).
+
 | Command | Parameters | Description |
 |---------|------------|-------------|
-| `M700` | — | Home Z axis to min endstop |
-| `M701` | `S<steps> F<Hz>` | Move Z relative by steps at step frequency F |
-| `M800` | `S<0/1>` | Lamp fan enable (P-MOS) |
-| `M801` | `S<0/1>` | UV lamp power enable (P-MOS) |
-| `M802` | `S<0-255>` | Set UV lamp PWM intensity |
-| `M810` | `P0 S<0/1>` | Front panel LED on/off |
-| `M820` | `S<ms>` | Set system check interval in ms (default 1000) |
-| `M114` | — | Report Z position (Z:n steps), endstop (ES:0/1), button (BTN:0/1), temperature (NTC:n°C) |
+| `ZH` | — | Home Z axis to min endstop |
+| `ZM` | `S<steps> F<Hz>` | Move Z relative by steps at step frequency F (Hz). Positive = up, negative = down. |
+| `GET` | — | Report Z position (Z:n steps), endstop (ES:0/1), button (BTN:0/1), temperature (NTC:n°C) |
+| `LFE` | — | Lamp fan enable (P-MOS) |
+| `LFD` | — | Lamp fan disable (P-MOS) |
+| `LPE` | — | UV lamp power enable (P-MOS) |
+| `LPD` | — | UV lamp power disable (P-MOS) |
+| `LPI` | `I<0-255>` | Set UV lamp PWM intensity |
+| `FPLE` | — | Front panel LED on |
+| `FPLD` | — | Front panel LED off |
+| `SCHI` | `I<ms>` | Set system check interval in ms |
 
 ## Verified
 

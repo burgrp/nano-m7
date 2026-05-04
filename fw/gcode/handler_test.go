@@ -238,8 +238,11 @@ func TestParseLineInvalidCommand(t *testing.T) {
 }
 
 func TestParseLineLetterOnlyCommand(t *testing.T) {
-	_, _, err := parseLine("GO X10") // "GO" has no digit
-	if err == nil {
-		t.Error("expected error for letter-only command")
+	cmd, _, err := parseLine("GET")
+	if err != nil {
+		t.Fatalf("unexpected error for letter-only command: %v", err)
+	}
+	if cmd != "GET" {
+		t.Errorf("expected GET, got %s", cmd)
 	}
 }

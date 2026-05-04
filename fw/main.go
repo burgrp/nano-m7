@@ -87,11 +87,11 @@ func main() {
 	reporter := report.NewReporter(frontPanel, lamp, zAxis)
 
 	commands := gcode.Commands{
-		"M700": func(args map[string]int) (string, error) {
+		"ZH": func(args map[string]int) (string, error) {
 			zAxis.Home()
 			return "", nil
 		},
-		"M701": func(args map[string]int) (string, error) {
+		"ZM": func(args map[string]int) (string, error) {
 			steps := args["S"]
 			freq := args["F"]
 			if freq <= 0 {
@@ -100,30 +100,39 @@ func main() {
 			zAxis.Move(steps, freq)
 			return "", nil
 		},
-		"M114": func(args map[string]int) (string, error) {
+		"GET": func(args map[string]int) (string, error) {
 			return reporter.Report()
 		},
-		"M800": func(args map[string]int) (string, error) {
-			state := args["S"] == 1
-			lamp.SetFan(state)
+		"LFE": func(args map[string]int) (string, error) {
+			lamp.SetFan(true)
 			return "", nil
 		},
-		"M801": func(args map[string]int) (string, error) {
-			state := args["S"] == 1
-			lamp.SetPower(state)
+		"LFD": func(args map[string]int) (string, error) {
+			lamp.SetFan(false)
 			return "", nil
 		},
-		"M802": func(args map[string]int) (string, error) {
-			lamp.SetPwm(args["S"])
+		"LPE": func(args map[string]int) (string, error) {
+			lamp.SetPower(true)
 			return "", nil
 		},
-		"M810": func(args map[string]int) (string, error) {
-			state := args["S"] == 1
-			frontPanel.SetLed(state)
+		"LPD": func(args map[string]int) (string, error) {
+			lamp.SetPower(false)
 			return "", nil
 		},
-		"M820": func(args map[string]int) (string, error) {
-			intervalMs := args["S"]
+		"LPI": func(args map[string]int) (string, error) {
+			lamp.SetPwm(args["I"])
+			return "", nil
+		},
+		"FPLE": func(args map[string]int) (string, error) {
+			frontPanel.SetLed(true)
+			return "", nil
+		},
+		"FPLD": func(args map[string]int) (string, error) {
+			frontPanel.SetLed(false)
+			return "", nil
+		},
+		"SCHI": func(args map[string]int) (string, error) {
+			intervalMs := args["I"]
 			if intervalMs <= 0 {
 				return "", errors.New("invalid interval")
 			}
