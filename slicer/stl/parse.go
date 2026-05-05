@@ -19,39 +19,47 @@ func ParseFile(path string) (*mesh.Mesh, error) {
 	}
 	defer f.Close()
 
-	buf := bufio.NewReader(f)
-	header, err := buf.Peek(80)
+	stat, err := f.Stat()
 	if err != nil {
 		return nil, err
 	}
 
-	if strings.HasPrefix(strings.TrimSpace(string(header)), "solid") {
-		return parseASCII(buf)
+	// Read the 80-byte header and the 4-byte triangle count.
+	var header [80]byte
+	if _, err := io.ReadFull(f, header[:]); err != nil {
+		return nil, err
 	}
-	return parseBinary(buf)
+	var count uint32
+	if err := binary.Read(f, binary.LittleEndian, &count); err != nil {
+		return nil, err
+	}
+
+	// Binary STL is exactly 84 + count*50 bytes. Use file size — not the
+	// "solid" header prefix — to distinguish binary from ASCII, because many
+	// binary exporters write "solid <name>" in the header.
+	if stat.Size() == int64(84)+int64(count)*50 {
+		return parseBinary(count, bufio.NewReader(f))
+	}
+
+	// Not a valid binary file: seek back and parse as ASCII.
+	if _, err := f.Seek(0, io.SeekStart); err != nil {
+		return nil, err
+	}
+	return parseASCII(bufio.NewReader(f))
 }
 
-// Binary STL: 80-byte header | uint32 count | count × (12-byte normal + 3×12-byte vertex + 2-byte attr)
-func parseBinary(r io.Reader) (*mesh.Mesh, error) {
-	var header [80]byte
-	if err := binary.Read(r, binary.LittleEndian, &header); err != nil {
-		return nil, err
-	}
-
-	var count uint32
-	if err := binary.Read(r, binary.LittleEndian, &count); err != nil {
-		return nil, err
-	}
-
+// parseBinary reads count triangles; the caller has already consumed the
+// 80-byte header and 4-byte count from the underlying reader.
+func parseBinary(count uint32, r io.Reader) (*mesh.Mesh, error) {
 	tris := make([]mesh.Triangle, 0, count)
 	for i := uint32(0); i < count; i++ {
-		var raw [12]float32 // normal(3) + A(3) + B(3) + C(3)
+		// 12 floats: normal(3) + A(3) + B(3) + C(3)
+		var raw [12]float32
 		if err := binary.Read(r, binary.LittleEndian, &raw); err != nil {
 			return nil, fmt.Errorf("triangle %d: %w", i, err)
 		}
 		var attr uint16
-		binary.Read(r, binary.LittleEndian, &attr) //nolint: ignore attr
-
+		binary.Read(r, binary.LittleEndian, &attr) //nolint: errcheck — attribute byte count is informational only
 		tris = append(tris, mesh.Triangle{
 			A: mesh.Vec3{X: float64(raw[3]), Y: float64(raw[4]), Z: float64(raw[5])},
 			B: mesh.Vec3{X: float64(raw[6]), Y: float64(raw[7]), Z: float64(raw[8])},
