@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'f1-regular';
+    src: url("NunitoSans_10pt-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'f1-bold';
+    src: url("NunitoSans_10pt-Bold.ttf");
+}
+
+@font-face {
+    font-family: 'f1-black';
+    src: url("NunitoSans_10pt-Black.ttf");
+}
+
+body {
+    --color-bg: white;
+    --color-fg: #1d1d20;
+    font-family: 'f1-regular', sans-serif;
+    font-size: 16pt;
+    background-color: var(--color-bg);
+    color: var(--color-fg)
+}

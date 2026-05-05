@@ -12,16 +12,6 @@ import (
 )
 
 type Status struct {
-	TriggerSource string `json:"triggerSource"`
-	TriggerLoop   bool   `json:"triggerLoop"`
-	TriggerState  string `json:"triggerState"`
-	Counter       int    `json:"counter"`
-	HvsVolts      int    `json:"hvsVolts"`
-	SamplingMode  string `json:"samplingMode"`
-	Hostname      string `json:"hostname"`
-	IpAddress     string `json:"ipAddress"`
-	NTP           bool   `json:"ntp"`
-	USB           string `json:"usb"`
 }
 
 type UiApi struct {
@@ -39,8 +29,6 @@ func NewUiApi(bus *event.EventBus) (*UiApi, []*webglue.Event) {
 	}
 
 	statusChangedEv := webglue.NewEvent("statusChanged")
-	encoderEv := webglue.NewEvent("encoderEvent")
-	systemUpdateInfoEv := webglue.NewEvent("systemUpdateInfo")
 
 	dirty := false
 	go func() {
@@ -68,8 +56,6 @@ func NewUiApi(bus *event.EventBus) (*UiApi, []*webglue.Event) {
 
 	return api, []*webglue.Event{
 		statusChangedEv,
-		encoderEv,
-		systemUpdateInfoEv,
 	}
 }
 
@@ -97,8 +83,4 @@ func (api *UiApi) ApplyUserSettingsYaml(s string) (string, error) {
 	api.bus.Send(user.SetSettings(&newSettings))
 
 	return string(s), nil
-}
-
-func (api *UiApi) AddCalibration(yamlText string) error {
-	return nil
 }
