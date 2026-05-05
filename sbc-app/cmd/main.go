@@ -9,7 +9,6 @@ import (
 
 	"syscall"
 
-	"github.com/burgrp/nano-m7/sbc-app/pkg/log"
 	net "github.com/burgrp/nano-m7/sbc-app/pkg/net/impl"
 	system "github.com/burgrp/nano-m7/sbc-app/pkg/system/impl"
 	user "github.com/burgrp/nano-m7/sbc-app/pkg/user/impl"
@@ -34,7 +33,7 @@ func main() {
 
 	cancelChan := make(chan os.Signal, 1)
 	signal.Notify(cancelChan, syscall.SIGTERM, syscall.SIGINT)
-	log.Info("Application started.")
+	slog.Info("Application started.")
 	<-cancelChan
-	log.Info("Shutting down")
+	slog.Info("Shutting down")
 }

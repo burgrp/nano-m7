@@ -23,10 +23,6 @@ func Init(bus *event.EventBus) {
 			panic(err)
 		}
 
-		if systemConfig.WebUiKeys == "" {
-			systemConfig.WebUiKeys = "/data/sac/web-ui-keys.yaml"
-		}
-
 		bus.Send(system.ConfigLoaded(&systemConfig))
 	})
 

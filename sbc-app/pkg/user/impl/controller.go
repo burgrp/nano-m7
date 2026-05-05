@@ -1,8 +1,9 @@
 package user
 
 import (
+	"log/slog"
+
 	"github.com/burgrp/nano-m7/sbc-app/pkg/common"
-	"github.com/burgrp/nano-m7/sbc-app/pkg/log"
 	"github.com/burgrp/nano-m7/sbc-app/pkg/system"
 	"github.com/burgrp/nano-m7/sbc-app/pkg/user"
 
@@ -21,7 +22,7 @@ func Init(bus *event.EventBus) {
 		fileName = event.UserSettings
 		err := common.LoadYaml(fileName, userSettings)
 		if err != nil {
-			log.Warn("Failed to load user settings: %v", err)
+			slog.Warn("Failed to load user settings", "error", err)
 		}
 
 		bus.Send(user.SettingsChanged(userSettings))
@@ -30,7 +31,7 @@ func Init(bus *event.EventBus) {
 	saveAndNotify := func() {
 		err := common.SaveYaml(fileName, userSettings)
 		if err != nil {
-			log.Error("Failed to save user settings: %v", err)
+			slog.Error("Failed to save user settings", "error", err)
 		}
 		bus.Send(user.SettingsChanged(userSettings))
 	}

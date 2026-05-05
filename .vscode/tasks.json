@@ -6,7 +6,7 @@
 			"type": "shell",
 			"command": "make flash",
 			"options": {
-				"cwd": "${workspaceFolder}/fw"
+				"cwd": "${workspaceFolder}/peri-fw"
 			},
 			"group": {
 				"kind": "build",
