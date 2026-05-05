@@ -127,14 +127,23 @@ func (h *Handler) jsonDB(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) machineJSON() map[string]any {
 	st := h.printer.GetState()
 	return map[string]any{
-		"ID":          1,
-		"Name":        h.setup.Name,
-		"XSize":       h.setup.XSizeMM,
-		"YSize":       h.setup.YSizeMM,
-		"ZSize":       h.setup.ZSizeMM,
+		"ID":           1,
+		"Name":         h.setup.Name,
+		"PrinterModel": h.setup.PrinterModel,
+		// physical build volume (derived)
+		"XSize": h.setup.XSizeMM(),
+		"YSize": h.setup.YSizeMM(),
+		"ZSize": h.setup.ZSize,
+		// projector / display
 		"XResolution": h.setup.XResolution,
 		"YResolution": h.setup.YResolution,
-		"StepsPerMM":  h.setup.StepsPerMM,
+		"PixelSizeX":  h.setup.PixelSizeX,
+		"PixelSizeY":  h.setup.PixelSizeY,
+		// z motion defaults
+		"StepsPerMM":   h.setup.StepsPerMM,
+		"LiftHeight":   h.setup.LiftHeight,
+		"LiftSpeed":    h.setup.LiftSpeed,
+		"RetractSpeed": h.setup.RetractSpeed,
 		// printer state
 		"Status":       st.Status,
 		"CurrentLayer": st.CurrentLayer,
@@ -214,12 +223,15 @@ func (h *Handler) postSetup(w http.ResponseWriter, r *http.Request) {
 	if v := field("Name"); v != "" {
 		h.setup.Name = v
 	}
-	h.setup.XSizeMM = fieldF("XSize", h.setup.XSizeMM)
-	h.setup.YSizeMM = fieldF("YSize", h.setup.YSizeMM)
-	h.setup.ZSizeMM = fieldF("ZSize", h.setup.ZSizeMM)
+	h.setup.ZSize = fieldF("ZSize", h.setup.ZSize)
 	h.setup.XResolution = fieldI("XResolution", h.setup.XResolution)
 	h.setup.YResolution = fieldI("YResolution", h.setup.YResolution)
+	h.setup.PixelSizeX = fieldF("PixelSizeX", h.setup.PixelSizeX)
+	h.setup.PixelSizeY = fieldF("PixelSizeY", h.setup.PixelSizeY)
 	h.setup.StepsPerMM = fieldF("StepsPerMM", h.setup.StepsPerMM)
+	h.setup.LiftHeight = fieldF("LiftHeight", h.setup.LiftHeight)
+	h.setup.LiftSpeed = fieldF("LiftSpeed", h.setup.LiftSpeed)
+	h.setup.RetractSpeed = fieldF("RetractSpeed", h.setup.RetractSpeed)
 
 	if err := h.store.SaveSetup(h.setup); err != nil {
 		jsonErr(w, http.StatusInternalServerError, err.Error())

@@ -43,20 +43,35 @@ type Profile struct {
 }
 
 // Setup holds persistent printer configuration.
+// Field names mirror NanoDLP's machine.json / setup API where possible.
 type Setup struct {
 	Name         string  `json:"Name"`
-	XSizeMM      float64 `json:"XSizeMM"`
-	YSizeMM      float64 `json:"YSizeMM"`
-	ZSizeMM      float64 `json:"ZSizeMM"`
-	XResolution  int     `json:"XResolution"`
-	YResolution  int     `json:"YResolution"`
+	PrinterModel string  `json:"PrinterModel"`
+	// Build volume
+	ZSize        float64 `json:"ZSize"`        // mm
+	XResolution  int     `json:"XResolution"`  // pixels
+	YResolution  int     `json:"YResolution"`  // pixels
+	PixelSizeX   float64 `json:"PixelSizeX"`   // µm
+	PixelSizeY   float64 `json:"PixelSizeY"`   // µm
+	// Z motion
 	StepsPerMM   float64 `json:"StepsPerMM"`
+	LiftHeight   float64 `json:"LiftHeight"`   // mm
+	LiftSpeed    float64 `json:"LiftSpeed"`    // mm/min
+	RetractSpeed float64 `json:"RetractSpeed"` // mm/min
+	// Hardware
 	SerialPort   string  `json:"SerialPort"`
 	SerialBaud   int     `json:"SerialBaud"`
+	// Display
 	Fullscreen   bool    `json:"Fullscreen"`
 	WindowWidth  int     `json:"WindowWidth"`
 	WindowHeight int     `json:"WindowHeight"`
 }
+
+// XSizeMM returns the physical X build area in mm (derived from resolution and pixel size).
+func (s *Setup) XSizeMM() float64 { return float64(s.XResolution) * s.PixelSizeX / 1000.0 }
+
+// YSizeMM returns the physical Y build area in mm.
+func (s *Setup) YSizeMM() float64 { return float64(s.YResolution) * s.PixelSizeY / 1000.0 }
 
 type Store struct {
 	root string
@@ -126,12 +141,16 @@ func (s *Store) SaveSetup(setup *Setup) error {
 func defaultSetup() *Setup {
 	return &Setup{
 		Name:         "NanoM7",
-		XSizeMM:      223.78,
-		YSizeMM:      126.98,
-		ZSizeMM:      200,
+		PrinterModel: "NanoM7",
+		ZSize:        200,
 		XResolution:  13320,
 		YResolution:  5120,
+		PixelSizeX:   16.8,  // µm — DBM101M14K01
+		PixelSizeY:   24.8,  // µm — DBM101M14K01
 		StepsPerMM:   400,
+		LiftHeight:   5,
+		LiftSpeed:    60,   // mm/min
+		RetractSpeed: 120,  // mm/min
 		SerialPort:   "/dev/ttyACM0",
 		SerialBaud:   115200,
 		Fullscreen:   false,
