@@ -1,0 +1,18 @@
+.page>.container>.setup {
+    & {
+        flex-grow: 1;
+    }
+    
+    &>.editor {
+        background-color: unset;
+        flex-grow: 1;
+        color: unset;
+        padding: 0.5em;
+    }
+
+    &>.buttons {
+        margin-top: 0.5em;
+        justify-content: center;
+        gap: 0.5em;
+    }
+}

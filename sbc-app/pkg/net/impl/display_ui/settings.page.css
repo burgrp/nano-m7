@@ -1,0 +1,116 @@
+.page.settings {
+
+    .hidden {
+        display: none;
+    }
+
+    &, div {
+        flex-direction: column;
+    }
+
+    &>.sections {
+
+        height: calc(100vh - 3.3em);
+        margin: 0.2em;
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+        &>.section {
+
+            &>.title {
+                color: var(--color-fg-suppressed);
+                font-size: 1.2em;
+                margin-bottom: 0.3em;
+            }
+
+            &>.entries {
+
+                & .entry {
+
+                    border-left: 0.15em solid var(--color-fg-suppressed);
+                    margin-bottom: 0.5em;
+                    padding-left: 0.5em;
+
+                    &.selected {
+                        border-left-color: var(--color-hi1);
+                        outline: none;
+                        background: #222
+                    }
+
+                    &>.title {
+                        font-family: f1-bold;
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    &>.editor {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.9);
+
+        justify-content: center;
+
+        &>.frame {
+            margin: 1em;
+            padding: 0.5em;
+            background-color: #333;
+            box-shadow: 10px 10px 10px black;
+            border: 2px solid #AAA;
+            border-radius: 6px;
+
+            &>.title {
+                font-size: 1.2em;
+                margin-bottom: 0.3em;
+                text-shadow: 0 0 0.3em black;
+            }
+
+            &>.value {
+                flex-direction: row;
+                align-items: center;
+                min-height: 3em;
+
+                &>.field {
+
+                    min-width: 0.5em;
+                    min-height: 1em;
+
+                    &.selected {
+                        font-size: 1.2em;
+                        padding: 0.2em;
+                        outline: 2px solid var(--color-hi1);
+                    }
+
+                    &.rolling {
+                        background-color: #666;
+                        font-family: f1-bold;
+                    }
+                }
+            }
+
+            &>.description {
+                font-size: smaller;
+                color: #EEE;
+                margin-bottom: 1em;
+            }
+        }
+    }
+
+    .buttons {
+        border-top: 0.15em solid var(--color-fg-suppressed);
+        padding-top: 0.2em;
+        justify-content: space-around;
+        flex-direction: row;
+        gap: 0.2em;
+    }
+
+    &>.buttons {
+        margin: 0.5em;
+    }
+
+
+}

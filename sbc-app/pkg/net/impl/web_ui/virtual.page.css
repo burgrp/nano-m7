@@ -1,0 +1,223 @@
+.page>.container>.virtual {
+    & {
+        gap: 2em;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .logic-group>.content {
+        gap: 2em;
+        flex-wrap: wrap;
+    }
+
+    .logic-group {
+
+        &.panel {
+
+            &>.content {
+                align-items: center;
+
+                .push-button.big {
+
+                    &.loop, &.ready, &.start {
+                        min-width: 5em;
+                        min-height: 5em;
+                    }
+
+                    &.start {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+
+                        &>div {
+                            justify-content: center;
+                        }
+
+                        &>div:first-child {
+                            border-bottom: 1px solid #000000;
+                        }
+
+                    }
+                }
+
+                .sub-group.encoder>.content {
+                    flex-wrap: nowrap;
+
+                    button {
+                        width: 3em;
+                        height: 3em;
+                    }
+                }
+
+                .display {
+                    border: 1em #161616 solid;
+                    border-radius: 1em;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    box-shadow: 0 0 1em inset #3e3e3e;
+                    box-shadow: 0 0 1em black;
+
+                    &>iframe {
+                        border: none;
+                    }
+                }
+
+                .sub-group.inputs>.content {
+                    .push-button {
+
+                        width: 3.5em;
+                        height: 3.5em;
+                        min-width: unset;
+                        border-radius: 4em;
+
+                        &.det {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                    }
+
+                }
+
+                .sub-group.usb>.content {
+
+                    .hole {
+                        background-color: black;
+                        position: relative;
+                        margin: 0 1em;
+
+                        &:hover {
+                            box-shadow: 0 0 0.5em white;
+                        }
+
+                        .frame {
+                            width: 12mm;
+                            height: 5mm;
+
+                            border: 1px solid #969696;
+                            flex-grow: 1;
+                            margin: .5mm;
+                            flex-flow: column;
+                            border-radius: 0.5mm;
+
+                            .plastic {
+                                background-color: white;
+                                height: 1.3mm;
+                                margin: 0.5mm;
+                            }
+
+                            .pins {
+                                flex-grow: 1;
+                                justify-content: center;
+                                gap: 1.1mm;
+
+                                .pin {
+                                    background-color: #ddae00;
+                                    height: 0.5mm;
+                                    width: 1.1mm;
+                                }
+                            }
+                        }
+
+                        .disk {
+                            position: absolute;
+                            background-color: red;
+                            left: -5mm;
+                            top: -2mm;
+                            right: -5mm;
+                            bottom: -3mm;
+                            border: outset red;
+                            border-radius: 4mm;
+                            visibility: hidden;
+
+                            &.inserted {
+                                visibility: unset;
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        &.experiment {
+
+            .sub-group.background-pulses {
+
+                &>.content {
+
+                    & {
+                        align-items: center;
+                    }
+
+                    .suffix {
+                        margin-left: 0.3em;
+                    }
+
+                    input {
+                        width: 4em;
+                    }
+                }
+            }
+
+            .sub-group.materials {
+                fieldset {
+                    border: unset;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1em;
+
+                    .material {
+
+                        align-items: flex-start;
+
+                        .texts {
+                            flex-direction: column;
+                            margin-left: 0.5em;
+
+                            .isotopes {
+                                flex-direction: column;
+                                margin-left: 1em;
+
+                                .isotope {
+                                    gap: 0.5em;
+
+                                    .half-life {
+                                        color: var(--color-fg-suppressed);
+                                        display: inline;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+            .start-group {
+                flex-direction: column;
+                gap: 1em;
+                align-items: center;
+
+                .push-button {
+                    width: 6em;
+                    height: 4em;
+                    margin: 2em;
+                }
+            }
+        }
+
+    }
+
+}
+
+input {
+    border: unset;
+    padding: 0.3em;
+    font-size: unset;
+}

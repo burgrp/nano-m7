@@ -1,0 +1,74 @@
+body {
+    background-color: #000;
+    color: #FFF;
+    font-family: "f1-regular";
+    overflow: hidden;
+    margin: 0;
+    --color-fg-suppressed: #7d7d7d;
+    --color-lines: #d7d5d5;
+    --color-hi1: #ff0047;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+div {
+    display: flex;
+}
+
+.with-units::after {
+    margin-left: 0.1em;
+}
+
+.with-units.volts::after {
+    content: "V";
+}
+
+button.action {
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    flex-basis: 50%;
+    text-transform: uppercase;
+    font-family: f1-bold;
+
+    &.selected {
+        outline: 2px solid var(--color-hi1);
+    }
+}
+
+.page {
+
+    flex-direction: column;
+    height: 100vh;
+
+    >.header, >.footer {
+        background-color: #4a4a4a;
+        padding: 0.3em;
+        border: 0px solid var(--color-lines);
+        text-shadow: 0 0 4px black;
+        justify-content: center;
+    }
+
+    >.header {
+        border-bottom-width: 1px;
+    }
+
+    >.footer {
+        border-top-width: 1px;
+    }
+
+    >.error {
+        position: absolute;
+        margin: 1em 1em 0 1em;
+        padding: .5em;
+        word-break: break-all;
+        background-color: red;
+        border: 2px solid var(--color-lines);
+        box-shadow: 0 0 1em black;
+        border-radius: 0.3em;
+    }
+
+}

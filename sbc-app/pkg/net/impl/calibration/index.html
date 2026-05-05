@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">Processing calibration data for Silver Activation Counter (SAC) detector</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <h1 data-i18n="page.title">Processing calibration data for Silver Activation Counter (SAC) detector</h1>
+    <button id="lang-toggle"
+            onclick="setLang(currentLang === 'cs' ? 'en' : 'cs')"
+            style="margin-left:auto;padding:0.15rem 0.5rem;font-size:0.78rem;cursor:pointer;
+                   border:1px solid rgba(255,255,255,0.4);border-radius:4px;
+                   background:rgba(255,255,255,0.08);color:#c8d8f0;
+                   font-weight:700;white-space:nowrap;flex-shrink:0;">CZ</button>
+</header>
+
+<main>
+
+    <!-- ==================== KROK 0: Vstupní formulář ==================== -->
+    <section id="section-input">
+        <h2 data-i18n="form.heading">Vstupní parametry</h2>
+        <form id="calib-form">
+            <div class="form-group">
+                <label data-i18n="form.fileLabel">Výběr experimentů:</label>
+                <div id="experiment-picker">
+                    <div id="exp-picker-left">
+                        <button type="button" id="load-experiments-btn" data-i18n="form.loadBtn">↺ Obnovit seznam</button>
+                        <span id="experiments-load-status"></span>
+                        <div id="experiments-list" class="exp-picker-list"></div>
+                        <div id="experiments-selection-info"></div>
+                    </div>
+                    <div id="exp-picker-preview">
+                        <div id="exp-preview-placeholder" class="exp-preview-placeholder"></div>
+                        <div id="exp-preview-content" hidden>
+                            <div id="exp-preview-id" class="exp-preview-id"></div>
+                            <div id="exp-preview-scroll"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fluence" data-i18n="form.fluenceLabel">Fluence neutronového zdroje použitého při kalibraci (n/s):</label>
+                <input type="number" id="fluence" step="any" min="0"
+                       placeholder="např. 1.2e6" required>
+            </div>
+            <div class="form-group">
+                <label for="hide-time-sec" data-i18n="form.hideTimeLabel">Čas na uložení zářiče (s):</label>
+                <input type="number" id="hide-time-sec" step="0.5" min="0" value="6">
+            </div>
+            <div class="form-group">
+                <label data-i18n="form.bgLabel">Radiační pozadí (pulsů/min):</label>
+                <div class="bg-source-group">
+                    <label class="bg-source-option">
+                        <input type="radio" name="bg-source" value="yaml" checked>
+                        <span data-i18n-html="form.bgYaml">Ze souboru YAML (<code>backgroundPulsesPerMinute</code>)</span>
+                    </label>
+                    <label class="bg-source-option">
+                        <input type="radio" name="bg-source" value="free">
+                        <span data-i18n-html="form.bgFree">Zanechat parametr pozadí (y<sub>0</sub>) jako volný parametr fitu</span>
+                    </label>
+                    <label class="bg-source-option">
+                        <input type="radio" name="bg-source" value="manual">
+                        <span data-i18n="form.bgManual">Zadat ručně:</span>&nbsp;
+                        <input type="number" id="bg-manual" step="any" min="0"
+                               data-i18n-placeholder="form.bgManualPlaceholder"
+                               placeholder="pulsů/min" disabled>
+                    </label>
+                </div>
+            </div>
+            <button type="submit" data-i18n="form.submitBtn">▶ Zpracovat data</button>
+        </form>
+    </section>
+
+    <!-- ==================== KROK 1: Parsovaná data ==================== -->
+    <section id="section-step1" class="result-section" style="display:none;">
+        <h2 data-i18n="step1.heading">Krok 1 – Načtená data</h2>
+        <div id="step1-content"></div>
+    </section>
+
+    <!-- ==================== KROK 2: Histogramy ==================== -->
+    <section id="section-step2" class="result-section" style="display:none;">
+        <h2 data-i18n="step2.heading">Krok 2 – Histogramy</h2>
+        <div id="step2-content"></div>
+    </section>
+
+    <!-- ==================== KROK 3: Proložení ==================== -->
+    <section id="section-step3" class="result-section" style="display:none;">
+        <h2 data-i18n="step3.heading">Krok 3 – Proložení dvojitou exponenciálou</h2>
+        <div id="step3-content"></div>
+    </section>
+
+    <!-- ==================== MULTI-CALIB: Souhrnný přehled souborů ==================== -->
+    <section id="section-multi-summary" class="result-section" style="display:none;">
+        <h2 data-i18n="multi.heading">Zpracování kalibrace pro více vzdáleností – Přehled souborů</h2>
+        <div id="multi-summary-content"></div>
+    </section>
+
+</main>
+
+<!-- js-yaml for parsing YAML files in the browser -->
+<script src="js/js-yaml.min.js"></script>
+<!-- Chart.js for rendering charts -->
+<script src="js/chart.umd.min.js"></script>
+<!-- i18n: CZ/EN language toggle (must load before all app scripts) -->
+<script src="js/i18n.js"></script>
+<!-- Helper functions, fitting, charts, main application -->
+<script src="js/utils.js"></script>
+<script src="js/fitting.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+<!-- SheetJS for Excel export -->
+<script src="js/xlsx.min.js"></script>
+<!-- Multi-distance calibration -->
+<script src="js/multi-calib.js"></script>
+
+</body>
+</html>

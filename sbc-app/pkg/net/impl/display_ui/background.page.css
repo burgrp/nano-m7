@@ -1,0 +1,9 @@
+/* view styles are defined in last.page.js */
+
+.page.background {
+    .main {
+        .entries {
+            margin: 2em 0.5em;            
+        }
+    }
+}

@@ -1,0 +1,132 @@
+.common.logic-group {
+
+    & {
+        border: 0.15em solid var(--color-lines);
+        border-radius: 0.5em;
+        flex-direction: column;
+        background-color: var(--color-bg-group)
+    }
+
+    &>.header {
+        &>.label {
+            background-color: var(--color-lines);
+            color: var(--color-bg);
+            text-transform: uppercase;
+            font-family: 'f1-bold';
+            padding: 0 0.5em 0 1em;
+            letter-spacing: 0.2em;
+            min-width: 10em;
+        }
+
+        &>.chamfer {
+            height: 1.4em;
+            width: 1.4em;
+            background-image: url('group-header-end.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+    }
+
+    &>.content {
+        margin: 2em 2em 2em 2em;
+    }
+
+}
+
+.common.sub-group {
+    & {
+        flex-direction: column;
+    }
+
+    &>.label {
+        border-bottom: 1px solid var(--color-fg-suppressed);
+        justify-content: center;
+        margin-bottom: 0.8em;
+    }
+
+    &>.content {
+        flex-wrap: wrap;
+        gap: 1em;
+        justify-content: center;
+    }
+}
+
+.push-button, .tool-button {
+
+    & {
+        background-color: var(--color-btn-bg);
+        color: var(--color-bg);
+        border: none;
+        border-radius: 0.2em;
+        padding: 0.5em;
+        box-shadow: inset 0 0 0.3em black;
+    }
+
+    &.push-button {
+        min-width: 5em;
+    }
+
+    &.tool-button {
+        width: 2em;
+        height: 2em;
+    }
+
+    &:hover {
+        background-color: var(--color-btn-hover);
+        box-shadow: 0 0 .5em var(--color-btn-hover);
+    }
+
+    &:active {
+        position: relative;
+        left: 0.1em;
+        top: 0.1em;
+    }
+
+    &.action {
+        text-transform: uppercase;
+        font-family: 'f1-bold';
+        letter-spacing: 0.1em;
+    }
+
+    &.selected {
+        --bg: #ffdb5f;
+        background-color: var(--bg);
+        box-shadow: 0 0 1em var(--bg), inset 0 0 0.3em black;
+    }
+
+    &.big.selected {
+        box-shadow: 0 0 1em var(--bg), inset 0 0 0.7em black;
+    }
+
+}
+
+.dialog.overlay {
+    position: absolute;
+    background-color: #00000054;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    &>.window {
+        background-color: #f1f1f1;
+        padding: 2em 3em;
+        border-radius: 0.5em;
+        box-shadow: 0 0 2em black;
+        flex-direction: column;
+
+        &>.buttons {
+            margin-top: 2em;
+            justify-content: center;
+            gap: 2em;
+
+            .push-button:hover {
+                background-color: var(--color-hi1)
+            }
+        }
+    }
+}

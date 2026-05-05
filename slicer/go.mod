@@ -1,3 +1,3 @@
-module github.com/pburgr/nano-m7/slicer
+module github.com/burgrp/nano-m7/sbc-app
 
 go 1.22

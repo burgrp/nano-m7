@@ -1,0 +1,10 @@
+/* view styles are defined in last.page.js */
+
+.page.background-options {
+    .main {
+        flex-grow: 1;
+        margin: 3em 2em;
+        gap: 2em;
+        flex-direction: column;
+    }
+}
