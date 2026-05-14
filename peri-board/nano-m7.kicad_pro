@@ -541,7 +541,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "../../../tmp/nano-m7.step",
       "svg": "",
       "vrml": ""
     },

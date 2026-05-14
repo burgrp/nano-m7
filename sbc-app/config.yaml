@@ -1,1 +1,2 @@
 httpPort: 8080
+userSettings: "data/user.yaml"

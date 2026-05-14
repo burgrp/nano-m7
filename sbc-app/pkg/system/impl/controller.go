@@ -5,7 +5,6 @@ import (
 
 	"github.com/burgrp/nano-m7/sbc-app/pkg/common"
 	"github.com/burgrp/nano-m7/sbc-app/pkg/system"
-	"github.com/burgrp/nano-m7/sbc-app/pkg/user"
 
 	event "github.com/burgrp/go-event/pkg"
 )
@@ -24,10 +23,6 @@ func Init(bus *event.EventBus) {
 		}
 
 		bus.Send(system.ConfigLoaded(&systemConfig))
-	})
-
-	bus.Listen(func(userSettingsChanged user.SetSettings) {
-
 	})
 
 }

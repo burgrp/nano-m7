@@ -1,4 +1,4 @@
-package user
+package impl
 
 import (
 	"log/slog"
@@ -13,7 +13,7 @@ import (
 func Init(bus *event.EventBus) {
 
 	userSettings := &user.Settings{
-		// set defaults here
+		PrinterName: "SLA",
 	}
 
 	fileName := ""
@@ -23,6 +23,26 @@ func Init(bus *event.EventBus) {
 		err := common.LoadYaml(fileName, userSettings)
 		if err != nil {
 			slog.Warn("Failed to load user settings", "error", err)
+		}
+
+		if len(userSettings.Profiles) == 0 {
+			slog.Info("No profiles in user settings, seeding built-in defaults")
+			userSettings.Profiles = user.DefaultProfiles()
+		}
+
+		activeProfileExists := false
+		firstProfileID := ""
+		for id, profile := range userSettings.Profiles {
+			if profile.Name == userSettings.ActiveProfile {
+				activeProfileExists = true
+				break
+			}
+			if firstProfileID == "" {
+				firstProfileID = id
+			}
+		}
+		if userSettings.ActiveProfile == "" || !activeProfileExists {
+			userSettings.ActiveProfile = firstProfileID
 		}
 
 		bus.Send(user.SettingsChanged(userSettings))
