@@ -10,7 +10,7 @@ function decorate(page, url, ...content) {
         DIV("page", [
             DIV("navigation", [
                 DIV("printer-name", e => elPrinterName = e),
-                AHREF("link models", { href: "home" }, [DIV("fa-solid fa-cube"), DIV("label").text("Models")]),
+                AHREF("link home", { href: "home" }, [DIV("fa-solid fa-cube"), DIV("label").text("Models")]),
                 AHREF("link resins", { href: "resins" }, [DIV("fa-solid fa-flask"), DIV("label").text("Resins")]),
                 AHREF("link service", { href: "service" }, [DIV("fa-solid fa-up-down"), DIV("label").text("Service")]),
                 AHREF("link settings", { href: "settings" }, [DIV("fa-solid fa-sliders"), DIV("label").text("Settings")]),
@@ -20,6 +20,8 @@ function decorate(page, url, ...content) {
             .addClass(url)
             .onUiUserSettingsChanged((_, s) => updateStatus(s))
     ]
+
+    $(...content).find(`.navigation .link.${url}`).addClass("active")
 
     function updateStatus(status) {
         document.title = status.printerName + (page.title? " - " + page.title: "")
