@@ -137,6 +137,12 @@ Custom non-standard command set (not GCODE-compatible).
 | `FPLD` | — | Front panel LED off |
 | `SCHI` | `I<ms>` | Set system check interval in ms |
 
+### Controller Board to Raspberry Pi 4 wiring
+
+Wired by ribbon cable:
+
+![wiring](raspi4-wiring.png)
+
 ## Verified
 
 - BHTM08 works correctly with DBM101M14K01
